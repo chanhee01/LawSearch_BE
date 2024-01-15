@@ -2,6 +2,7 @@ package com.example.lawSearch.domain.user.model;
 
 import com.example.lawSearch.domain.answer.model.Answer;
 import com.example.lawSearch.domain.question.model.Question;
+import com.example.lawSearch.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,11 +16,13 @@ import static jakarta.persistence.GenerationType.*;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
+    private String email; // 이메일로 로그인
 
     private String password;
 
@@ -28,8 +31,6 @@ public class User {
     private Integer age;
 
     private boolean sex;
-
-    private String email;
 
     @OneToMany(mappedBy = "user")
     private List<Question> questions;

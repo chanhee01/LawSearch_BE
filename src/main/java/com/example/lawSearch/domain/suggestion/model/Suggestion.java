@@ -1,6 +1,7 @@
 package com.example.lawSearch.domain.suggestion.model;
 
 import com.example.lawSearch.domain.user.model.User;
+import com.example.lawSearch.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import static jakarta.persistence.GenerationType.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Suggestion {
+public class Suggestion extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

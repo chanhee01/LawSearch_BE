@@ -2,6 +2,7 @@ package com.example.lawSearch.domain.answer.model;
 
 import com.example.lawSearch.domain.question.model.Question;
 import com.example.lawSearch.domain.user.model.User;
+import com.example.lawSearch.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import static jakarta.persistence.GenerationType.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Answer {
+public class Answer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

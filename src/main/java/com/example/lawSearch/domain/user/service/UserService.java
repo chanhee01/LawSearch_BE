@@ -2,6 +2,7 @@ package com.example.lawSearch.domain.user.service;
 
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
+import com.example.lawSearch.domain.user.exception.EmailExistException;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class UserService {
     @Transactional
     public UserResponseDto join(UserRequestDto request) {
         if(userRepository.existsByEmail(request.getEmail())) {
-
+            throw new EmailExistException(request.getEmail());
         }
         User user = User.builder()
                 .email(request.getEmail())

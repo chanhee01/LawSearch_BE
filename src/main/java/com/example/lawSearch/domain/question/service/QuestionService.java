@@ -31,5 +31,16 @@ public class QuestionService {
         return save.getId();
     }
 
-    
+    @Transactional
+    public Long updateQuestion(UpdateQuestionRequest request, Long questionId, User user) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new QuestionNotFoundException(questionId));
+
+        if (question.getUser() != user) {
+            throw new QuestionUserMismatchException(user.getId());
+        }
+
+        question.updateQuestion(request.getTitle(), request.getContent());
+        return question.getId();
+    }
 }

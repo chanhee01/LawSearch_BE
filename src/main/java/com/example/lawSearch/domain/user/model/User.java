@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.*;
@@ -30,7 +32,9 @@ public class User extends BaseEntity {
 
     private Integer age;
 
-    private boolean sex;
+    private boolean sex; // true가 남자, false가 여자
+
+    private String roles;
 
     @OneToMany(mappedBy = "user")
     private List<Question> questions;
@@ -39,11 +43,19 @@ public class User extends BaseEntity {
     private List<Answer> answers;
 
     @Builder
-    public User(String password, String name, Integer age, boolean sex, String email) {
+    public User(String password, String name, Integer age, boolean sex, String email, String roles) {
         this.password = password;
         this.name = name;
         this.age = age;
         this.sex = sex;
         this.email = email;
+        this.roles = roles;
+    }
+
+    public List<String> getRoleList() {
+        if (this.roles.length() > 0) {
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
     }
 }

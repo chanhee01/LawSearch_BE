@@ -20,7 +20,7 @@ public class UserService {
 
     @Transactional
     public UserResponseDto join(UserRequestDto request) {
-        if(userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailExistException(request.getEmail());
         }
         User user = User.builder()
@@ -34,6 +34,10 @@ public class UserService {
         userRepository.save(user);
 
         return new UserResponseDto(user.getId());
+    }
+
+    public boolean validationEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     public User findByEmail(String email) {

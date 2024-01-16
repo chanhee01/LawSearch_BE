@@ -2,6 +2,7 @@ package com.example.lawSearch.domain.user.model;
 
 import com.example.lawSearch.domain.answer.model.Answer;
 import com.example.lawSearch.domain.question.model.Question;
+import com.example.lawSearch.domain.suggestion.model.Suggestion;
 import com.example.lawSearch.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -42,6 +43,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Answer> answers;
 
+    @OneToMany(mappedBy = "user")
+    private List<Suggestion> suggestions;
+
     @Builder
     public User(String password, String name, Integer age, boolean sex, String email, String roles) {
         this.password = password;
@@ -57,5 +61,17 @@ public class User extends BaseEntity {
             return Arrays.asList(this.roles.split(","));
         }
         return new ArrayList<>();
+    }
+
+    public void addQuestion(Question question) {
+        questions.add(question);
+    }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+    }
+
+    public void addSuggestion(Suggestion suggestion) {
+        suggestions.add(suggestion);
     }
 }

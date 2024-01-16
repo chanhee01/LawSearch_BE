@@ -21,6 +21,8 @@ public class Question extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    private String title;
+
     private String content;
 
     private String category; // 위원회 설정해주기
@@ -35,11 +37,16 @@ public class Question extends BaseEntity {
     private Answer answer;
 
     @Builder
-    public Question(String content, String category, User user, Answer answer) {
+    public Question(String title, String content, String category, User user) {
+        this.title = title;
         this.content = content;
         this.category = category;
         this.status = false;
         this.user = user;
-        this.answer = answer;
+    }
+
+    public void updateQuestion(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }

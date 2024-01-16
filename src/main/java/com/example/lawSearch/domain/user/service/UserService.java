@@ -36,4 +36,9 @@ public class UserService {
         return new UserResponseDto(user.getId());
     }
 
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        return user;
+    }
+
 }

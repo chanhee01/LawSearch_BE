@@ -1,6 +1,7 @@
 package com.example.lawSearch.domain.question.service;
 
 import com.example.lawSearch.domain.question.dto.request.CreateQuestionRequest;
+import com.example.lawSearch.domain.question.dto.request.DeleteQuestionRequest;
 import com.example.lawSearch.domain.question.dto.request.UpdateQuestionRequest;
 import com.example.lawSearch.domain.question.exception.QuestionNotFoundException;
 import com.example.lawSearch.domain.question.exception.QuestionUserMismatchException;
@@ -43,6 +44,17 @@ public class QuestionService {
 
         question.updateQuestion(request.getTitle(), request.getContent());
         return question.getId();
+    }
+
+    @Transactional
+    public void deleteQuestion(Long questionId, User user) {
+        Question question = findById(questionId);
+
+        if (question.getUser() != user) {
+            throw new QuestionUserMismatchException(user.getId());
+        }
+
+        questionRepository.delete(question);
     }
 
     public Question findById(Long questionId) {

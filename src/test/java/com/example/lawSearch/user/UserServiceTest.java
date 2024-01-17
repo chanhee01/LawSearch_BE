@@ -1,4 +1,4 @@
-package com.example.lawSearch.user.login;
+package com.example.lawSearch.user;
 
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.exception.EmailExistException;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-public class LoginTest {
+public class UserServiceTest {
 
     @Autowired
     private UserService userService;
@@ -26,7 +26,11 @@ public class LoginTest {
         UserRequestDto request = new UserRequestDto("email@naver.com", "password", "kim", 20, true);
         userService.join(request);
         User user = userService.findByEmail(request.getEmail());
+
         assertThat(user.getEmail()).isEqualTo(request.getEmail());
+        assertThat(user.getName()).isEqualTo(request.getName());
+        assertThat(user.getAge()).isEqualTo(request.getAge());
+        assertThat(user.isSex()).isEqualTo(request.isSex());
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.example.lawSearch.domain.user.service;
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
 import com.example.lawSearch.domain.user.exception.EmailExistException;
+import com.example.lawSearch.domain.user.exception.UserNotFoundException;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,12 @@ public class UserService {
 
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email);
+        return user;
+    }
+
+    public User findById(Long id) {
+        User user = userRepository.findById(id).
+                orElseThrow(() -> new UserNotFoundException(id));
         return user;
     }
 

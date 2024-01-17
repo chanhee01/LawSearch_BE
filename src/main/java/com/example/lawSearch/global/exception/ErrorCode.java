@@ -10,6 +10,7 @@ public enum ErrorCode {
 
     // login
     EMAIL_EXIST(HttpStatus.BAD_REQUEST, "Login01", "이메일이 이미 존재합니다."),
+    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "Login02", "해당 사용자가 존재하지 않습니다."),
 
     // question
     QUESTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "Question01", "문의가 존재하지 않습니다."),

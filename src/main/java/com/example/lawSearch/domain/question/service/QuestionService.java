@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +35,7 @@ public class QuestionService {
 
     @Transactional
     public Long updateQuestion(UpdateQuestionRequest request, Long questionId, User user) {
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new QuestionNotFoundException(questionId));
+        Question question = findById(questionId);
 
         if (question.getUser() != user) {
             throw new QuestionUserMismatchException(user.getId());
@@ -42,5 +43,11 @@ public class QuestionService {
 
         question.updateQuestion(request.getTitle(), request.getContent());
         return question.getId();
+    }
+
+    public Question findById(Long questionId) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new QuestionNotFoundException(questionId));
+        return question;
     }
 }

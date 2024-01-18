@@ -8,6 +8,7 @@ import com.example.lawSearch.domain.question.service.QuestionService;
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.domain.user.service.UserService;
+import com.example.lawSearch.global.base.Category;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +35,7 @@ public class QuestionServiceTest {
     @Transactional
     @DisplayName("문의 글 작성")
     void createQuestion() {
-        CreateQuestionRequest request = new CreateQuestionRequest("title", "content", "category");
+        CreateQuestionRequest request = new CreateQuestionRequest("title", "content", Category.FOREIGN);
         UserRequestDto userDto = new UserRequestDto("email@naver.com", "password", "kim", 20, true);
         userService.join(userDto);
         User user = userService.findByEmail(userDto.getEmail());
@@ -51,7 +52,7 @@ public class QuestionServiceTest {
     @Transactional
     @DisplayName("문의 글 수정")
     void updateQuestion() {
-        CreateQuestionRequest request = new CreateQuestionRequest("title", "content", "category");
+        CreateQuestionRequest request = new CreateQuestionRequest("title", "content", Category.EDUCATION);
         UserRequestDto userDto = new UserRequestDto("email@naver.com", "password", "kim", 20, true);
         userService.join(userDto);
         User user = userService.findByEmail(userDto.getEmail());
@@ -69,7 +70,7 @@ public class QuestionServiceTest {
     @Transactional
     @DisplayName("문의 글 삭제")
     void deleteQuestion() {
-        CreateQuestionRequest request = new CreateQuestionRequest("title", "content", "category");
+        CreateQuestionRequest request = new CreateQuestionRequest("title", "content", Category.ENVIRONMENT);
         UserRequestDto userDto = new UserRequestDto("email@naver.com", "password", "kim", 20, true);
         userService.join(userDto);
         User user = userService.findByEmail(userDto.getEmail());
@@ -84,9 +85,9 @@ public class QuestionServiceTest {
     @Transactional
     @DisplayName("자기가 작성한 문의 글 리스트")
     void questionList() {
-        CreateQuestionRequest request1 = new CreateQuestionRequest("title1", "content1", "category");
-        CreateQuestionRequest request2 = new CreateQuestionRequest("title2", "content2", "category");
-        CreateQuestionRequest request3 = new CreateQuestionRequest("title3", "content3", "category");
+        CreateQuestionRequest request1 = new CreateQuestionRequest("title1", "content1", Category.INDUSTRY);
+        CreateQuestionRequest request2 = new CreateQuestionRequest("title2", "content2", Category.EDUCATION);
+        CreateQuestionRequest request3 = new CreateQuestionRequest("title3", "content3", Category.ENVIRONMENT);
 
         UserRequestDto userDto = new UserRequestDto("email@naver.com", "password", "kim", 20, true);
         userService.join(userDto);
@@ -105,7 +106,7 @@ public class QuestionServiceTest {
         userService.join(userDto2);
 
         User user2 = userService.findByEmail(userDto2.getEmail());
-        CreateQuestionRequest request4 = new CreateQuestionRequest("title4", "content4", "category");
+        CreateQuestionRequest request4 = new CreateQuestionRequest("title4", "content4", Category.HEALTH_WELFARE);
         Long questionId4 = questionService.createQuestion(request4, user2);
         Question question4 = questionService.findById(questionId4);
         // ===== 다른 사람이 작성한 문의 글 ======
@@ -117,4 +118,6 @@ public class QuestionServiceTest {
         assertThat(questionList.contains(question3));
         assertThat(!questionList.contains(question4));
     }
+
+
 }

@@ -3,12 +3,14 @@ package com.example.lawSearch.domain.question.model;
 import com.example.lawSearch.domain.answer.model.Answer;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.global.base.BaseEntity;
+import com.example.lawSearch.global.base.Category;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 
@@ -25,7 +27,8 @@ public class Question extends BaseEntity {
 
     private String content;
 
-    private String category; // 위원회 설정해주기
+    @Enumerated(STRING)
+    private Category category;
 
     private boolean status; // 문의 중, 답변 완료
 
@@ -37,7 +40,7 @@ public class Question extends BaseEntity {
     private Answer answer;
 
     @Builder
-    public Question(String title, String content, String category, User user) {
+    public Question(String title, String content, Category category, User user) {
         this.title = title;
         this.content = content;
         this.category = category;

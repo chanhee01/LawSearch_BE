@@ -1,5 +1,6 @@
 package com.example.lawSearch.domain.question.dto.request;
 
+import com.example.lawSearch.global.base.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class CreateQuestionRequest {
     private String title;
     private String content;
-    private String category; // enum으로 수정필요
+    private Category category; // enum으로 수정필요
 }

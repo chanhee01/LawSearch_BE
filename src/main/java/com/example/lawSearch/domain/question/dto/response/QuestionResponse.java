@@ -1,5 +1,7 @@
 package com.example.lawSearch.domain.question.dto.response;
 
+import com.example.lawSearch.domain.answer.model.Answer;
+import com.example.lawSearch.domain.question.model.Question;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,5 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionResponse {
-    private Long questionId;
+    private String title;
+    private String content;
+    private String category;
+    private String comment;
+
+    public QuestionResponse(Question question, Answer answer) {
+        this.title = question.getTitle();
+        this.content = question.getContent();
+        this.category = question.getCategory();
+        this.comment = answer.getContent();
+    }
 }

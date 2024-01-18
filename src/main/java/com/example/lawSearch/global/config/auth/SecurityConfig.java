@@ -41,9 +41,7 @@ public class SecurityConfig {
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.formLogin(formLogin ->
-                formLogin.disable()
-        );
+        http.formLogin(formLogin -> formLogin.disable());
 
         AuthenticationManagerBuilder sharedObject = http.getSharedObject(AuthenticationManagerBuilder.class);
 
@@ -62,8 +60,9 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authorize ->
                 authorize
-                        .requestMatchers("api/**").authenticated()
-                        .requestMatchers("api/answer/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/user/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/api/answer/**").hasAnyRole("ADMIN")
 
                         .anyRequest().permitAll()
         );

@@ -52,13 +52,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
 
-        PrincipalDetails principalDetailis = (PrincipalDetails) authResult.getPrincipal();
+        PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         String jwtToken = JWT.create()
-                .withSubject(principalDetailis.getUsername())
+                .withSubject(principalDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getExpirationTime()))
-                .withClaim("id", principalDetailis.getUser().getId())
-                .withClaim("email", principalDetailis.getUser().getEmail())
+                .withClaim("id", principalDetails.getUser().getId())
+                .withClaim("email", principalDetails.getUser().getEmail())
                 .sign(Algorithm.HMAC512(jwtProperties.getSecret()));
 
         response.addHeader(jwtProperties.getHeaderString(), jwtProperties.getTokenPrefix() + jwtToken);

@@ -1,20 +1,24 @@
 package com.example.lawSearch.question;
 
 import com.example.lawSearch.domain.question.dto.request.CreateQuestionRequest;
+import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
 import com.example.lawSearch.domain.question.exception.QuestionNotFoundException;
 import com.example.lawSearch.domain.question.model.Question;
 import com.example.lawSearch.domain.question.service.QuestionService;
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
-import com.example.lawSearch.domain.user.exception.EmailExistException;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -74,5 +78,43 @@ public class QuestionServiceTest {
         questionService.deleteQuestion(questionId, user);
 
         assertThrows(QuestionNotFoundException.class, () -> questionService.findById(questionId), "문의가 삭제되었습니다.");
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("자기가 작성한 문의 글 리스트")
+    void questionList() {
+        CreateQuestionRequest request1 = new CreateQuestionRequest("title1", "content1", "category");
+        CreateQuestionRequest request2 = new CreateQuestionRequest("title2", "content2", "category");
+        CreateQuestionRequest request3 = new CreateQuestionRequest("title3", "content3", "category");
+
+        UserRequestDto userDto = new UserRequestDto("email@naver.com", "password", "kim", 20, true);
+        userService.join(userDto);
+
+        User user = userService.findByEmail(userDto.getEmail());
+        Long questionId1 = questionService.createQuestion(request1, user);
+        Long questionId2 = questionService.createQuestion(request2, user);
+        Long questionId3 = questionService.createQuestion(request3, user);
+
+        Question question1 = questionService.findById(questionId1);
+        Question question2 = questionService.findById(questionId2);
+        Question question3 = questionService.findById(questionId3);
+
+        // 다른 사람이 작성한 글은 포함이 되지 않는다.
+        UserRequestDto userDto2 = new UserRequestDto("aaa@naver.com", "password2", "lee", 30, false);
+        userService.join(userDto2);
+
+        User user2 = userService.findByEmail(userDto2.getEmail());
+        CreateQuestionRequest request4 = new CreateQuestionRequest("title4", "content4", "category");
+        Long questionId4 = questionService.createQuestion(request4, user2);
+        Question question4 = questionService.findById(questionId4);
+        // ===== 다른 사람이 작성한 문의 글 ======
+
+        List<QuestionListResponse> questionList = questionService.findAllByUser(user.getId());
+
+        assertThat(questionList.contains(question1));
+        assertThat(questionList.contains(question2));
+        assertThat(questionList.contains(question3));
+        assertThat(!questionList.contains(question4));
     }
 }

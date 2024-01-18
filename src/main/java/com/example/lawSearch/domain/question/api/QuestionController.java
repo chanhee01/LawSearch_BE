@@ -1,16 +1,19 @@
 package com.example.lawSearch.domain.question.api;
 
 import com.example.lawSearch.domain.question.dto.request.CreateQuestionRequest;
-import com.example.lawSearch.domain.question.dto.request.DeleteQuestionRequest;
 import com.example.lawSearch.domain.question.dto.request.UpdateQuestionRequest;
+import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
 import com.example.lawSearch.domain.question.dto.response.QuestionResponse;
 import com.example.lawSearch.domain.question.service.QuestionService;
 import com.example.lawSearch.domain.user.model.User;
+import com.example.lawSearch.domain.user.service.UserService;
 import com.example.lawSearch.global.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,5 +51,14 @@ public class QuestionController {
         questionService.deleteQuestion(questionId, user);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<QuestionListResponse>> questionList(Authentication authentication) {
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        User user = principal.getUser();
+        List<QuestionListResponse> questionList = questionService.findAllByUser(user.getId());
+
+        return ResponseEntity.ok(questionList);
     }
 }

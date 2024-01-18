@@ -1,8 +1,8 @@
 package com.example.lawSearch.domain.question.service;
 
 import com.example.lawSearch.domain.question.dto.request.CreateQuestionRequest;
-import com.example.lawSearch.domain.question.dto.request.DeleteQuestionRequest;
 import com.example.lawSearch.domain.question.dto.request.UpdateQuestionRequest;
+import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
 import com.example.lawSearch.domain.question.exception.QuestionNotFoundException;
 import com.example.lawSearch.domain.question.exception.QuestionUserMismatchException;
 import com.example.lawSearch.domain.question.model.Question;
@@ -12,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +24,7 @@ public class QuestionService {
 
     @Transactional
     public Long createQuestion(CreateQuestionRequest request, User user) {
+
         Question question = Question.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
@@ -38,7 +39,7 @@ public class QuestionService {
     public Long updateQuestion(UpdateQuestionRequest request, Long questionId, User user) {
         Question question = findById(questionId);
 
-        if (question.getUser() != user) {
+        if (question.getUser().getId() != user.getId()) {
             throw new QuestionUserMismatchException(user.getId());
         }
 
@@ -50,7 +51,7 @@ public class QuestionService {
     public void deleteQuestion(Long questionId, User user) {
         Question question = findById(questionId);
 
-        if (question.getUser() != user) {
+        if (question.getUser().getId() != user.getId()) {
             throw new QuestionUserMismatchException(user.getId());
         }
 
@@ -61,5 +62,13 @@ public class QuestionService {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new QuestionNotFoundException(questionId));
         return question;
+    }
+
+    public List<QuestionListResponse> findAllByUser(Long userId) {
+        List<Question> questionList = questionRepository.findAllByUserId(userId);
+        List<QuestionListResponse> questions = questionList.stream().map(
+                (question) -> QuestionListResponse.convert(question))
+                .collect(Collectors.toList());
+        return questions;
     }
 }

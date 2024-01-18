@@ -14,6 +14,7 @@ import com.example.lawSearch.global.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +29,7 @@ public class QuestionController {
 
     @PostMapping("")
     public ResponseEntity<QuestionIdResponse> createQuestion (
-            Authentication authentication, @RequestBody CreateQuestionRequest request) {
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+            @AuthenticationPrincipal PrincipalDetails principal, @RequestBody CreateQuestionRequest request) {
         User user = principal.getUser();
         Long questionId = questionService.createQuestion(request, user);
 
@@ -37,9 +37,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}")
-    public ResponseEntity<QuestionResponse> getQuestion(Authentication authentication, @PathVariable Long questionId) {
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        User user = principal.getUser();
+    public ResponseEntity<QuestionResponse> getQuestion(@PathVariable Long questionId) {
         Question question = questionService.findById(questionId);
         Answer answer = answerService.findByQuestionId(question.getId());
 
@@ -48,9 +46,8 @@ public class QuestionController {
 
     @PatchMapping("/{questionId}")
     public ResponseEntity<QuestionIdResponse> updateQuestion (
-            Authentication authentication, @RequestBody UpdateQuestionRequest request,
+            @AuthenticationPrincipal PrincipalDetails principal, @RequestBody UpdateQuestionRequest request,
             @PathVariable Long questionId) {
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         User user = principal.getUser();
         questionService.updateQuestion(request, questionId, user);
 
@@ -59,8 +56,7 @@ public class QuestionController {
 
     @DeleteMapping("/{questionId}")
     public ResponseEntity<Void> deleteQuestion (
-            Authentication authentication, @PathVariable Long questionId) {
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+            @AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long questionId) {
         User user = principal.getUser();
         questionService.deleteQuestion(questionId, user);
 
@@ -68,8 +64,8 @@ public class QuestionController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<QuestionListResponse>> questionList(Authentication authentication) {
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+    public ResponseEntity<List<QuestionListResponse>> questionList(
+            @AuthenticationPrincipal PrincipalDetails principal) {
         User user = principal.getUser();
         List<QuestionListResponse> questionList = questionService.findAllByUser(user.getId());
 

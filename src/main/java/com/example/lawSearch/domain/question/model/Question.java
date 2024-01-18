@@ -29,11 +29,11 @@ public class Question extends BaseEntity {
 
     private boolean status; // 문의 중, 답변 완료
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "question")
+    @OneToOne(mappedBy = "question", cascade = ALL)
     private Answer answer;
 
     @Builder

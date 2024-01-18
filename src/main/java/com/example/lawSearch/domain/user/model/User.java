@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.GenerationType.*;
 
 @Entity
@@ -37,22 +38,22 @@ public class User extends BaseEntity {
 
     private String roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Answer> answers;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Suggestion> suggestions;
 
     @Builder
-    public User(String password, String name, Integer age, boolean sex, String email, String roles) {
+    public User(String email, String password, String name, Integer age, boolean sex, String roles) {
+        this.email = email;
         this.password = password;
         this.name = name;
         this.age = age;
         this.sex = sex;
-        this.email = email;
         this.roles = roles;
     }
 

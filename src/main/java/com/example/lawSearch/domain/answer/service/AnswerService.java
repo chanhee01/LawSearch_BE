@@ -14,6 +14,10 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
 
     public Answer findByQuestionId(Long questionId) {
-        return answerRepository.findByQuestionId(questionId);
+        Answer answer = answerRepository.findByQuestionId(questionId);
+        if (answer == null) {
+            return null;
+        }
+        return answer;
     }
 }

@@ -13,7 +13,6 @@ import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.global.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +38,8 @@ public class QuestionController {
     @GetMapping("/{questionId}")
     public ResponseEntity<QuestionResponse> getQuestion(@PathVariable Long questionId) {
         Question question = questionService.findById(questionId);
-        Answer answer = answerService.findByQuestionId(question.getId());
+        Answer answer = answerService.findByQuestionId(questionId);
+        if (answer == null) return ResponseEntity.ok(new QuestionResponse(question));
 
         return ResponseEntity.ok(new QuestionResponse(question, answer));
     }

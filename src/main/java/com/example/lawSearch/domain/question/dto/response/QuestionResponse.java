@@ -22,4 +22,10 @@ public class QuestionResponse {
         this.category = question.getCategory();
         this.comment = answer.getContent();
     }
+
+    public QuestionResponse(Question question) {
+        this.title = question.getTitle();
+        this.content = question.getContent();
+        this.category = question.getCategory();
+    }
 }

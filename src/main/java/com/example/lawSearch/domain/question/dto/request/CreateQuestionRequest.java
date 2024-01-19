@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class CreateQuestionRequest {
     private String title;
     private String content;
-    private Category category; // enum으로 수정필요
+    private Category category;
 }

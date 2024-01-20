@@ -1,6 +1,7 @@
 package com.example.lawSearch.domain.user.model;
 
 import com.example.lawSearch.domain.answer.model.Answer;
+import com.example.lawSearch.domain.like.model.Like;
 import com.example.lawSearch.domain.question.model.Question;
 import com.example.lawSearch.domain.suggestion.model.Suggestion;
 import com.example.lawSearch.global.base.BaseEntity;
@@ -47,6 +48,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Suggestion> suggestions;
 
+    @OneToMany(mappedBy = "user", cascade = ALL)
+    private List<Like> likeList;
+
     @Builder
     public User(String email, String password, String name, Integer age, boolean sex, String roles) {
         this.email = email;
@@ -74,5 +78,9 @@ public class User extends BaseEntity {
 
     public void addSuggestion(Suggestion suggestion) {
         suggestions.add(suggestion);
+    }
+
+    public void addLike(Like like) {
+        likeList.add(like);
     }
 }

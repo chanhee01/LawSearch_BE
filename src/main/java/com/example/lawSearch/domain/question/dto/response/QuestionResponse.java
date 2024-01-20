@@ -2,7 +2,7 @@ package com.example.lawSearch.domain.question.dto.response;
 
 import com.example.lawSearch.domain.answer.model.Answer;
 import com.example.lawSearch.domain.question.model.Question;
-import com.example.lawSearch.global.base.Category;
+import com.example.lawSearch.global.base.category.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

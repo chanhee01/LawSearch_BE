@@ -14,7 +14,10 @@ public enum ErrorCode {
 
     // question
     QUESTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "Question01", "문의가 존재하지 않습니다."),
-    QUESTION_USER_MIX_MATCH(HttpStatus.BAD_REQUEST, "Question02", "작성자와 사용자가 일치하지 않습니다.");
+    QUESTION_USER_MIX_MATCH(HttpStatus.BAD_REQUEST, "Question02", "작성자와 사용자가 일치하지 않습니다."),
+
+    //category
+    CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "Category01", "카테고리가 존재하지 않습니다.");
 
 
     private final HttpStatus status;

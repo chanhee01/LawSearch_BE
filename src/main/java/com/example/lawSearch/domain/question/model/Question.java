@@ -3,7 +3,7 @@ package com.example.lawSearch.domain.question.model;
 import com.example.lawSearch.domain.answer.model.Answer;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.global.base.BaseEntity;
-import com.example.lawSearch.global.base.Category;
+import com.example.lawSearch.global.base.category.Category;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

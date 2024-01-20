@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,12 +16,16 @@ public class QuestionResponse {
     private String title;
     private String content;
     private Category category;
+    private boolean status;
+    private LocalDateTime createdTime;
     private String comment;
 
     public QuestionResponse(Question question, Answer answer) {
         this.title = question.getTitle();
         this.content = question.getContent();
         this.category = question.getCategory();
+        this.status = question.isStatus();
+        this.createdTime = question.getCreatedDate();
         this.comment = answer.getContent();
     }
 
@@ -27,5 +33,7 @@ public class QuestionResponse {
         this.title = question.getTitle();
         this.content = question.getContent();
         this.category = question.getCategory();
+        this.status = question.isStatus();
+        this.createdTime = question.getCreatedDate();
     }
 }

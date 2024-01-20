@@ -11,13 +11,16 @@ import java.time.LocalDateTime;
 @Builder
 public class QuestionListResponse {
     private String title;
-    private Category category;
+    private String category;
     private LocalDateTime createdTime;
+    private boolean status;
 
     public static QuestionListResponse convert(Question question) {
         return QuestionListResponse.builder()
                 .title(question.getTitle())
-                .category(question.getCategory())
-                .createdTime(question.getCreatedDate()).build();
+                .category(question.getTitle())
+                .createdTime(question.getCreatedDate())
+                .status(question.isStatus())
+                .build();
     }
 }

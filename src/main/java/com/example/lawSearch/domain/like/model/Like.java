@@ -2,17 +2,21 @@ package com.example.lawSearch.domain.like.model;
 
 import com.example.lawSearch.domain.suggestion.model.Suggestion;
 import com.example.lawSearch.domain.user.model.User;
+import com.example.lawSearch.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.GenerationType.*;
+
 @Entity
 @Getter
 @NoArgsConstructor
-public class Like {
+@Table(name = "likes")
+public class Like extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

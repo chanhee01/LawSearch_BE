@@ -1,18 +1,17 @@
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/LawSearch
-    username: sa
-    password:
-
-  h2:
-    console:
-      enabled: true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
 
   jpa:
     hibernate:
+      show-sql : true
+      hibernate.format_sql : true
+      dialect : org.hibernate.dialect.MySQL8Dialect
       ddl-auto: update
-    properties:
-      hibernate:
-        use_sql_comments: true
-        format_sql: true
+      jdbc:
+        time-zone: Asia/Seoul
+
+jwt_secret : ${JWT_SECRET}

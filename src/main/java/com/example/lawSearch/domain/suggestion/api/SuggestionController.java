@@ -3,6 +3,8 @@ package com.example.lawSearch.domain.suggestion.api;
 import com.example.lawSearch.domain.suggestion.dto.request.CreateSuggestionDto;
 import com.example.lawSearch.domain.suggestion.dto.response.SuggestionIdResponse;
 import com.example.lawSearch.domain.suggestion.dto.response.SuggestionListResponse;
+import com.example.lawSearch.domain.suggestion.dto.response.SuggestionResponse;
+import com.example.lawSearch.domain.suggestion.model.Suggestion;
 import com.example.lawSearch.domain.suggestion.service.SuggestionService;
 import com.example.lawSearch.global.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +49,11 @@ public class SuggestionController {
 
         List<SuggestionListResponse> allSuggestion = suggestionService.findAllSuggestion(category, likeCount);
         return ResponseEntity.ok(allSuggestion);
+    }
+
+    @GetMapping("/{questionId}")
+    public ResponseEntity<SuggestionResponse> findOne(@PathVariable Long questionId) {
+        Suggestion suggestion = suggestionService.findById(questionId);
+        return ResponseEntity.ok(new SuggestionResponse(suggestion));
     }
 }

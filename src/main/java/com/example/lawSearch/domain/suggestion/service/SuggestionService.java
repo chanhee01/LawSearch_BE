@@ -1,6 +1,7 @@
 package com.example.lawSearch.domain.suggestion.service;
 
 import com.example.lawSearch.domain.suggestion.dto.request.CreateSuggestionDto;
+import com.example.lawSearch.domain.suggestion.dto.response.SuggestionListResponse;
 import com.example.lawSearch.domain.suggestion.exception.SuggestionNotFoundException;
 import com.example.lawSearch.domain.suggestion.exception.SuggestionUserMismatchException;
 import com.example.lawSearch.domain.suggestion.model.Suggestion;
@@ -10,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +44,14 @@ public class SuggestionService {
         }
 
         suggestionRepository.delete(suggestion);
+    }
+
+    public List<SuggestionListResponse> findAllByUser(User user) {
+        List<Suggestion> suggestionList = suggestionRepository.findAllByUser(user.getId());
+        List<SuggestionListResponse> suggestions = suggestionList.stream()
+                .map((suggestion -> SuggestionListResponse.convert(suggestion)))
+                .collect(Collectors.toList());
+        return suggestions;
     }
 
     public Suggestion findById(Long suggestionId) {

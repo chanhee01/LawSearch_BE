@@ -27,7 +27,7 @@ public class SuggestionRepositoryImpl implements SuggestionRepositoryCustom {
         }
 
         if (likeCount != null && likeCount) {
-            query.orderBy(suggestion.likeCount.desc());
+            query.orderBy(suggestion.likeList.size().desc());
         } else {
             query.orderBy(suggestion.createdDate.desc());
         }

@@ -47,7 +47,7 @@ public class SuggestionService {
     }
 
     public List<SuggestionListResponse> findAllByUser(User user) {
-        List<Suggestion> suggestionList = suggestionRepository.findAllByUser(user.getId());
+        List<Suggestion> suggestionList = suggestionRepository.findAllByUser(user);
         List<SuggestionListResponse> suggestions = suggestionList.stream()
                 .map((suggestion -> SuggestionListResponse.convert(suggestion)))
                 .collect(Collectors.toList());

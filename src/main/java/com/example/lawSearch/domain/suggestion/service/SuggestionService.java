@@ -42,4 +42,10 @@ public class SuggestionService {
 
         suggestionRepository.delete(suggestion);
     }
+
+    public Suggestion findById(Long suggestionId) {
+        Suggestion suggestion = suggestionRepository.findById(suggestionId)
+                .orElseThrow(() -> new SuggestionNotFoundException(suggestionId));
+        return suggestion;
+    }
 }

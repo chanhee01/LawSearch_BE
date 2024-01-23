@@ -9,7 +9,6 @@ import com.example.lawSearch.domain.question.dto.response.QuestionIdResponse;
 import com.example.lawSearch.domain.question.dto.response.QuestionResponse;
 import com.example.lawSearch.domain.question.model.Question;
 import com.example.lawSearch.domain.question.service.QuestionService;
-import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.global.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

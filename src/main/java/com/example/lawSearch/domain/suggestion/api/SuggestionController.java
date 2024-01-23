@@ -26,6 +26,7 @@ public class SuggestionController {
     @DeleteMapping("/{questionId}")
     public ResponseEntity<Void> deleteSuggestion(
             @AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long questionId) {
-        suggestionService.
+        suggestionService.deleteSuggestion(questionId, principal.getUser());
+        return ResponseEntity.ok().build();
     }
 }

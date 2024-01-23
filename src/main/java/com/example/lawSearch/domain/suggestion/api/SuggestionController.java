@@ -39,4 +39,13 @@ public class SuggestionController {
         suggestionService.deleteSuggestion(questionId, principal.getUser());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<SuggestionListResponse>> suggestionList(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Boolean likeCount) {
+
+        List<SuggestionListResponse> allSuggestion = suggestionService.findAllSuggestion(category, likeCount);
+        return ResponseEntity.ok(allSuggestion);
+    }
 }

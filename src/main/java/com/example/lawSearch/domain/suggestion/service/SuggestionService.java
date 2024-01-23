@@ -7,6 +7,7 @@ import com.example.lawSearch.domain.suggestion.exception.SuggestionUserMismatchE
 import com.example.lawSearch.domain.suggestion.model.Suggestion;
 import com.example.lawSearch.domain.suggestion.repository.SuggestionRepository;
 import com.example.lawSearch.domain.user.model.User;
+import com.example.lawSearch.global.base.category.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,17 @@ public class SuggestionService {
         }
 
         suggestionRepository.delete(suggestion);
+    }
+
+    public List<SuggestionListResponse> findAllSuggestion(String reqCategory, Boolean likeCount) {
+        Category category;
+        if (reqCategory != null) category = Category.categoryConverter(reqCategory);
+        else category = null;
+
+        List<Suggestion> allSuggestion = suggestionRepository.findAllSuggestion(category, likeCount);
+        return allSuggestion.stream()
+                .map(suggestion -> SuggestionListResponse.convert(suggestion))
+                .collect(Collectors.toList());
     }
 
     public List<SuggestionListResponse> findAllByUser(User user) {

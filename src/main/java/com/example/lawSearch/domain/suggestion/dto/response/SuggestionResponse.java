@@ -5,12 +5,15 @@ import com.example.lawSearch.global.base.category.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 public class SuggestionResponse {
     private String title;
     private String content;
     private Category category;
+    private LocalDateTime createdTime;
     private String name;
     private Integer likeCount;
 
@@ -18,7 +21,8 @@ public class SuggestionResponse {
         this.title = suggestion.getTitle();
         this.content = suggestion.getContent();
         this.category = suggestion.getCategory();
+        this.createdTime = suggestion.getCreatedDate();
         this.name = suggestion.getUser().getName();
-        this.likeCount = suggestion.getLikeList().size();
+        this.likeCount = (suggestion.getLikeList() != null) ? suggestion.getLikeList().size() : 0;
     }
 }

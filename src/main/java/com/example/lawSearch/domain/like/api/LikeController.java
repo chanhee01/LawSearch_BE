@@ -1,0 +1,27 @@
+package com.example.lawSearch.domain.like.api;
+
+import com.example.lawSearch.domain.like.dto.request.LikeRequest;
+import com.example.lawSearch.domain.like.service.LikeService;
+import com.example.lawSearch.global.auth.PrincipalDetails;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/like")
+public class LikeController {
+
+    private final LikeService likeService;
+
+    @PostMapping("")
+    public ResponseEntity<Void> like(
+            @AuthenticationPrincipal PrincipalDetails principal, @RequestBody LikeRequest request) {
+        likeService.like(principal.getUser(), request.getSuggestionId());
+        return ResponseEntity.ok().build();
+    }
+}

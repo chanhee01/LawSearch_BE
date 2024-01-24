@@ -20,8 +20,12 @@ public enum ErrorCode {
     SUGGESTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "Question01", "해당 정책 건의가 존재하지 않습니다."),
     SUGGESTION_USER_MIX_MATCH(HttpStatus.BAD_REQUEST, "Question02", "작성자와 사용자가 일치하지 않습니다."),
 
-    //category
-    CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "Category01", "해당 카테고리가 없습니다.");
+    // category
+    CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "Category01", "해당 카테고리가 없습니다."),
+
+    // like
+    SELF_LIKE(HttpStatus.BAD_REQUEST, "Like01", "자신의 정책 건의에는 좋아요를 할 수 없습니다."),
+    ALREADY_LIKE(HttpStatus.BAD_REQUEST, "Like02", "좋아요를 이미 누른 상태입니다.");
 
 
     private final HttpStatus status;

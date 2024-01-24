@@ -18,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -50,7 +51,7 @@ public class SecurityConfig {
 
         http.authenticationManager(authenticationManager);
 
-        http.addFilter(corsConfig.corsFilter());
+        http.addFilterBefore(corsConfig.corsFilter(), SecurityContextPersistenceFilter.class);
         http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager, jwtProperties), UsernamePasswordAuthenticationFilter.class);
         http.addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, jwtProperties));
 

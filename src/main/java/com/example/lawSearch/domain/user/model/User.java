@@ -40,16 +40,16 @@ public class User extends BaseEntity {
     private String roles;
 
     @OneToMany(mappedBy = "user", cascade = ALL)
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL)
-    private List<Answer> answers;
+    private List<Answer> answers = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL)
-    private List<Suggestion> suggestions;
+    private List<Suggestion> suggestions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL)
-    private List<Like> likeList;
+    private List<Like> likeList = new ArrayList<>();
 
     @Builder
     public User(String email, String password, String name, Integer age, boolean sex, String roles) {

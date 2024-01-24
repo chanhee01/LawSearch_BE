@@ -78,4 +78,33 @@ public class SuggestionServiceTest {
         assertThat(suggestionIds).contains(suggestionId2);
         assertThat(suggestionIds).doesNotContain(suggestionId3); // 다른 사람의 정책 건의는 포함되지 않는다.
     }
+
+    @Test
+    @Transactional
+    @DisplayName("조건을 넣은 위원회의 정책 건의만 반환")
+    void allSuggestion() {
+        UserRequestDto userDto1 = new UserRequestDto("email@naver.com", "password", "kim", 20, true);
+        userService.join(userDto1);
+        User user1 = userService.findByEmail(userDto1.getEmail());
+        CreateSuggestionDto suggestionDto1 = new CreateSuggestionDto("title1", "content1", "교육위원회");
+        Long suggestionId1 = suggestionService.createSuggestion(suggestionDto1, user1);
+
+        CreateSuggestionDto suggestionDto2 = new CreateSuggestionDto("title2", "content2", "정보위원회");
+        Long suggestionId2 = suggestionService.createSuggestion(suggestionDto2, user1);
+
+        // 다른 사람이 작성한 정책 건의 글
+        UserRequestDto userDto2 = new UserRequestDto("email2@naver.com", "password2", "lee", 30, false);
+        userService.join(userDto2);
+        User user2 = userService.findByEmail(userDto2.getEmail());
+        CreateSuggestionDto suggestionDto3 = new CreateSuggestionDto("title3", "content3", "교육위원회");
+        Long suggestionId3 = suggestionService.createSuggestion(suggestionDto3, user2);
+
+        List<SuggestionListResponse> suggestions = suggestionService.findAllSuggestion("교육위원회", true);
+
+        List<Long> suggestionIds = suggestions.stream().map(suggestion -> suggestion.getId()).collect(Collectors.toList());
+
+        assertThat(suggestionIds).contains(suggestionId1);
+        assertThat(suggestionIds).contains(suggestionId3);
+        assertThat(suggestionIds).doesNotContain(suggestionId2); // 다른 위원회는 포함 X
+    }
 }

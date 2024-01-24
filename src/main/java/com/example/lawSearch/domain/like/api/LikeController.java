@@ -21,4 +21,11 @@ public class LikeController {
         likeService.like(principal.getUser(), request.getSuggestionId());
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("")
+    public ResponseEntity<Void> deleteLike(
+            @AuthenticationPrincipal PrincipalDetails principal, @RequestBody LikeRequest request) {
+        likeService.deleteLike(principal.getUser(), request.getSuggestionId());
+        return ResponseEntity.ok().build();
+    }
 }

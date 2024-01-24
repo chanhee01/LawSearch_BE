@@ -1,6 +1,7 @@
 package com.example.lawSearch.domain.like.service;
 
 import com.example.lawSearch.domain.like.exception.AlreadyLikeException;
+import com.example.lawSearch.domain.like.exception.LikeNotFoundException;
 import com.example.lawSearch.domain.like.exception.SelfLikeException;
 import com.example.lawSearch.domain.like.model.Like;
 import com.example.lawSearch.domain.like.repository.LikeRepository;
@@ -36,5 +37,18 @@ public class LikeService {
                 .suggestion(suggestion).build();
         likeRepository.save(like);
         suggestion.addLike(like);
+    }
+
+    @Transactional
+    public void deleteLike(User user, Long suggestionId) {
+        Suggestion suggestion = suggestionService.findById(suggestionId);
+
+        if (likeRepository.findLikeByUserIdAndSuggestion(user.getId(), suggestion) == null) {
+            throw new LikeNotFoundException(suggestionId);
+        }
+
+        Like like = likeRepository.findLikeByUserIdAndSuggestion(user.getId(), suggestion);
+
+        likeRepository.delete(like);
     }
 }

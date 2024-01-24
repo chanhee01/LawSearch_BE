@@ -25,7 +25,8 @@ public enum ErrorCode {
 
     // like
     SELF_LIKE(HttpStatus.BAD_REQUEST, "Like01", "자신의 정책 건의에는 좋아요를 할 수 없습니다."),
-    ALREADY_LIKE(HttpStatus.BAD_REQUEST, "Like02", "좋아요를 이미 누른 상태입니다.");
+    ALREADY_LIKE(HttpStatus.BAD_REQUEST, "Like02", "좋아요를 이미 누른 상태입니다."),
+    LIKE_NOT_FOUND(HttpStatus.BAD_REQUEST, "Like03", "좋아요를 누르지 않았습니다.");
 
 
     private final HttpStatus status;

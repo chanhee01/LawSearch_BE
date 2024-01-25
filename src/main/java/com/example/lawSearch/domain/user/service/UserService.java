@@ -34,7 +34,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new UserResponseDto(user.getId());
+        return new UserResponseDto(user.getName());
     }
 
     public boolean validationEmail(String email) {

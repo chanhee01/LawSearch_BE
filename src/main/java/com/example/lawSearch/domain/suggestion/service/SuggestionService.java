@@ -71,4 +71,13 @@ public class SuggestionService {
                 .orElseThrow(() -> new SuggestionNotFoundException(suggestionId));
         return suggestion;
     }
+
+    public List<SuggestionListResponse> findByCategory(User user) {
+        Category category = Category.categoryConverter(user.getName());
+        List<Suggestion> suggestionList = suggestionRepository.findAllByCategory(category);
+        List<SuggestionListResponse> suggestions = suggestionList.stream()
+                .map((suggestion -> SuggestionListResponse.convert(suggestion)))
+                .collect(Collectors.toList());
+        return suggestions;
+    }
 }

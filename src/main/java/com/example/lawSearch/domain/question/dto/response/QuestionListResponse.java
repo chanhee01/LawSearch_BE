@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class QuestionListResponse {
     private String title;
     private String category;
+    private String name;
     private LocalDateTime createdTime;
     private boolean status;
     private Long id;
@@ -19,6 +20,7 @@ public class QuestionListResponse {
         return QuestionListResponse.builder()
                 .title(question.getTitle())
                 .category(question.getTitle())
+                .name(question.getUser().getName())
                 .createdTime(question.getCreatedDate())
                 .status(question.isStatus())
                 .id(question.getId())

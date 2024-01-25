@@ -8,6 +8,7 @@ import com.example.lawSearch.domain.question.exception.QuestionUserMismatchExcep
 import com.example.lawSearch.domain.question.model.Question;
 import com.example.lawSearch.domain.question.repository.QuestionRepository;
 import com.example.lawSearch.domain.user.model.User;
+import com.example.lawSearch.global.base.category.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +69,15 @@ public class QuestionService {
         List<Question> questionList = questionRepository.findAllByUserId(userId);
         List<QuestionListResponse> questions = questionList.stream().map(
                 (question) -> QuestionListResponse.convert(question))
+                .collect(Collectors.toList());
+        return questions;
+    }
+
+    public List<QuestionListResponse> findByCategory(User user) {
+        Category category = Category.categoryConverter(user.getName());
+        List<Question> questionList = questionRepository.findAllByCategory(category);
+        List<QuestionListResponse> questions = questionList.stream().map(
+                        (question) -> QuestionListResponse.convert(question))
                 .collect(Collectors.toList());
         return questions;
     }

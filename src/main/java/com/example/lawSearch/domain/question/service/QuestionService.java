@@ -3,6 +3,7 @@ package com.example.lawSearch.domain.question.service;
 import com.example.lawSearch.domain.question.dto.request.CreateQuestionRequest;
 import com.example.lawSearch.domain.question.dto.request.UpdateQuestionRequest;
 import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
+import com.example.lawSearch.domain.question.exception.QuestionHasAnswerException;
 import com.example.lawSearch.domain.question.exception.QuestionNotFoundException;
 import com.example.lawSearch.domain.question.exception.QuestionUserMismatchException;
 import com.example.lawSearch.domain.question.model.Question;
@@ -42,6 +43,10 @@ public class QuestionService {
 
         if (question.getUser().getId() != user.getId()) {
             throw new QuestionUserMismatchException(user.getId());
+        }
+
+        if (question.getAnswer() != null) {
+            throw new QuestionHasAnswerException(questionId);
         }
 
         question.updateQuestion(request.getTitle(), request.getContent());

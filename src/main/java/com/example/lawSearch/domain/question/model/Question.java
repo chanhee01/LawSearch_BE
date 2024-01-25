@@ -55,4 +55,8 @@ public class Question extends BaseEntity {
         this.title = title;
         this.content = content;
     }
+
+    public void updateStatus() {
+        this.status = true;
+    }
 }

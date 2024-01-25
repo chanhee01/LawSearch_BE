@@ -1,5 +1,7 @@
 package com.example.lawSearch.domain.answer.api;
 
+import com.example.lawSearch.domain.answer.dto.request.AnswerRequestDto;
+import com.example.lawSearch.domain.answer.dto.response.AnswerResponseDto;
 import com.example.lawSearch.domain.answer.service.AnswerService;
 import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
 import com.example.lawSearch.domain.question.service.QuestionService;
@@ -9,9 +11,7 @@ import com.example.lawSearch.global.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,5 +37,13 @@ public class AnswerController {
             @AuthenticationPrincipal PrincipalDetails principal) {
         List<SuggestionListResponse> suggestionList = suggestionService.findByCategory(principal.getUser());
         return ResponseEntity.ok(suggestionList);
+    }
+
+    @PostMapping("{questionId}")
+    public ResponseEntity<AnswerResponseDto> answer(
+            @AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long questionId,
+            @RequestBody AnswerRequestDto request) {
+        Long answerId = answerService.save(principal.getUser(), questionId, request.getContent());
+        return ResponseEntity.ok(new AnswerResponseDto(answerId));
     }
 }

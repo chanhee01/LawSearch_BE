@@ -8,6 +8,7 @@ import com.example.lawSearch.domain.question.service.QuestionService;
 import com.example.lawSearch.domain.suggestion.dto.response.SuggestionListResponse;
 import com.example.lawSearch.domain.suggestion.service.SuggestionService;
 import com.example.lawSearch.global.auth.PrincipalDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,7 +43,7 @@ public class AnswerController {
     @PostMapping("{questionId}")
     public ResponseEntity<AnswerResponseDto> answer(
             @AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long questionId,
-            @RequestBody AnswerRequestDto request) {
+            @Valid @RequestBody AnswerRequestDto request) {
         Long answerId = answerService.save(principal.getUser(), questionId, request.getContent());
         return ResponseEntity.ok(new AnswerResponseDto(answerId));
     }

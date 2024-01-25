@@ -7,6 +7,7 @@ import com.example.lawSearch.domain.suggestion.dto.response.SuggestionResponse;
 import com.example.lawSearch.domain.suggestion.model.Suggestion;
 import com.example.lawSearch.domain.suggestion.service.SuggestionService;
 import com.example.lawSearch.global.auth.PrincipalDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,9 +22,9 @@ public class SuggestionController {
 
     private final SuggestionService suggestionService;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<SuggestionIdResponse> createSuggestion(
-            @RequestBody CreateSuggestionDto request, @AuthenticationPrincipal PrincipalDetails principal) {
+            @Valid @RequestBody CreateSuggestionDto request, @AuthenticationPrincipal PrincipalDetails principal) {
         Long suggestionId = suggestionService.createSuggestion(request, principal.getUser());
         return ResponseEntity.ok(new SuggestionIdResponse(suggestionId));
     }

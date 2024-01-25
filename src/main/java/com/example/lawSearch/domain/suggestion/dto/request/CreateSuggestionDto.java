@@ -1,6 +1,7 @@
 package com.example.lawSearch.domain.suggestion.dto.request;
 
 import com.example.lawSearch.global.base.category.Category;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateSuggestionDto {
-
+    @NotBlank(message = "제목을 입력해주세요.")
     private String title;
+    @NotBlank(message = "내용을 입력해주세요.")
     private String content;
+    @NotBlank(message = "위원회를 입력해주세요.")
     private String category;
 
     public Category getCategory() {

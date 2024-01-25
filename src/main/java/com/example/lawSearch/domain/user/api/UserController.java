@@ -4,6 +4,7 @@ import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.dto.request.ValidationEmailRequestDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
 import com.example.lawSearch.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +20,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<UserResponseDto> join(@RequestBody UserRequestDto request) {
+    public ResponseEntity<UserResponseDto> join(@Valid @RequestBody UserRequestDto request) {
         UserResponseDto response = userService.join(request);
         return ResponseEntity.ok(response);
     }
 
     // 이메일 중복확인 버튼, true면 이미 존재
     @PostMapping("validation/email")
-    public ResponseEntity<Boolean> validationEmail(@RequestBody ValidationEmailRequestDto request) {
+    public ResponseEntity<Boolean> validationEmail(@Valid @RequestBody ValidationEmailRequestDto request) {
         return ResponseEntity.ok(userService.validationEmail(request.getEmail()));
     }
 }

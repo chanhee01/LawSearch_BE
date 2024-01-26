@@ -7,6 +7,7 @@ import com.example.lawSearch.domain.suggestion.dto.response.SuggestionResponse;
 import com.example.lawSearch.domain.suggestion.model.Suggestion;
 import com.example.lawSearch.domain.suggestion.service.SuggestionService;
 import com.example.lawSearch.global.auth.PrincipalDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,11 +22,24 @@ public class SuggestionController {
 
     private final SuggestionService suggestionService;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<SuggestionIdResponse> createSuggestion(
-            @RequestBody CreateSuggestionDto request, @AuthenticationPrincipal PrincipalDetails principal) {
+            @Valid @RequestBody CreateSuggestionDto request, @AuthenticationPrincipal PrincipalDetails principal) {
         Long suggestionId = suggestionService.createSuggestion(request, principal.getUser());
         return ResponseEntity.ok(new SuggestionIdResponse(suggestionId));
+    }
+
+    @GetMapping("/{suggestionId}")
+    public ResponseEntity<SuggestionResponse> findOne(@PathVariable Long suggestionId) {
+        Suggestion suggestion = suggestionService.findById(suggestionId);
+        return ResponseEntity.ok(new SuggestionResponse(suggestion));
+    }
+
+    @DeleteMapping("/{suggestionId}")
+    public ResponseEntity<Void> deleteSuggestion(
+            @AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long suggestionId) {
+        suggestionService.deleteSuggestion(suggestionId, principal.getUser());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/mySuggestion")
@@ -35,13 +49,6 @@ public class SuggestionController {
         return ResponseEntity.ok(suggestions);
     }
 
-    @DeleteMapping("/{questionId}")
-    public ResponseEntity<Void> deleteSuggestion(
-            @AuthenticationPrincipal PrincipalDetails principal, @PathVariable Long questionId) {
-        suggestionService.deleteSuggestion(questionId, principal.getUser());
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/list")
     public ResponseEntity<List<SuggestionListResponse>> suggestionList(
             @RequestParam(required = false) String category,
@@ -49,11 +56,5 @@ public class SuggestionController {
 
         List<SuggestionListResponse> allSuggestion = suggestionService.findAllSuggestion(category, likeCount);
         return ResponseEntity.ok(allSuggestion);
-    }
-
-    @GetMapping("/{questionId}")
-    public ResponseEntity<SuggestionResponse> findOne(@PathVariable Long questionId) {
-        Suggestion suggestion = suggestionService.findById(questionId);
-        return ResponseEntity.ok(new SuggestionResponse(suggestion));
     }
 }

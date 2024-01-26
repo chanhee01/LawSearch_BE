@@ -3,11 +3,13 @@ package com.example.lawSearch.domain.question.service;
 import com.example.lawSearch.domain.question.dto.request.CreateQuestionRequest;
 import com.example.lawSearch.domain.question.dto.request.UpdateQuestionRequest;
 import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
+import com.example.lawSearch.domain.question.exception.QuestionHasAnswerException;
 import com.example.lawSearch.domain.question.exception.QuestionNotFoundException;
 import com.example.lawSearch.domain.question.exception.QuestionUserMismatchException;
 import com.example.lawSearch.domain.question.model.Question;
 import com.example.lawSearch.domain.question.repository.QuestionRepository;
 import com.example.lawSearch.domain.user.model.User;
+import com.example.lawSearch.global.base.category.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +45,10 @@ public class QuestionService {
             throw new QuestionUserMismatchException(user.getId());
         }
 
+        if (question.getAnswer() != null) {
+            throw new QuestionHasAnswerException(questionId);
+        }
+
         question.updateQuestion(request.getTitle(), request.getContent());
         return question.getId();
     }
@@ -64,10 +70,19 @@ public class QuestionService {
         return question;
     }
 
-    public List<QuestionListResponse> findAllByUser(Long userId) {
-        List<Question> questionList = questionRepository.findAllByUserId(userId);
+    public List<QuestionListResponse> findAllByUser(User user) {
+        List<Question> questionList = questionRepository.findAllByUser(user);
         List<QuestionListResponse> questions = questionList.stream().map(
                 (question) -> QuestionListResponse.convert(question))
+                .collect(Collectors.toList());
+        return questions;
+    }
+
+    public List<QuestionListResponse> findByCategory(User user) {
+        Category category = Category.categoryConverter(user.getName());
+        List<Question> questionList = questionRepository.findAllByCategory(category);
+        List<QuestionListResponse> questions = questionList.stream().map(
+                        (question) -> QuestionListResponse.convert(question))
                 .collect(Collectors.toList());
         return questions;
     }

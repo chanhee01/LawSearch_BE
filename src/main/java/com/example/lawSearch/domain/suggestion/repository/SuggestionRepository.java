@@ -10,4 +10,5 @@ import java.util.List;
 public interface SuggestionRepository extends JpaRepository<Suggestion, Long> {
     List<Suggestion> findAllByUser(User user);
     List<Suggestion> findAllSuggestion(Category category, Boolean likeCount);
+    List<Suggestion> findAllByCategory(Category category);
 }

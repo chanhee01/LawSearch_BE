@@ -37,8 +37,7 @@ public class SuggestionService {
 
     @Transactional
     public void deleteSuggestion(Long suggestionId, User user) {
-        Suggestion suggestion = suggestionRepository.findById(suggestionId)
-                .orElseThrow(() -> new SuggestionNotFoundException(suggestionId));
+        Suggestion suggestion = findById(suggestionId);
 
         if (user.getId() != suggestion.getUser().getId()) {
             throw new SuggestionUserMismatchException(user.getId());
@@ -70,5 +69,14 @@ public class SuggestionService {
         Suggestion suggestion = suggestionRepository.findById(suggestionId)
                 .orElseThrow(() -> new SuggestionNotFoundException(suggestionId));
         return suggestion;
+    }
+
+    public List<SuggestionListResponse> findByCategory(User user) {
+        Category category = Category.categoryConverter(user.getName());
+        List<Suggestion> suggestionList = suggestionRepository.findAllByCategory(category);
+        List<SuggestionListResponse> suggestions = suggestionList.stream()
+                .map((suggestion -> SuggestionListResponse.convert(suggestion)))
+                .collect(Collectors.toList());
+        return suggestions;
     }
 }

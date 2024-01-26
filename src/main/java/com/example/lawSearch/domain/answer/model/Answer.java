@@ -4,6 +4,7 @@ import com.example.lawSearch.domain.question.model.Question;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.global.base.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +29,7 @@ public class Answer extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Builder
     public Answer(String content, Question question, User user) {
         this.content = content;
         this.question = question;

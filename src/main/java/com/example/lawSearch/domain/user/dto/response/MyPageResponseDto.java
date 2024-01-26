@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDto {
-    private String name;
+public class MyPageResponseDto {
+    private Integer questionCount;
+    private Integer suggestionCount;
 }

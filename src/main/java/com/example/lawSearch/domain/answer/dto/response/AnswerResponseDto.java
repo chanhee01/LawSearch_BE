@@ -1,12 +1,12 @@
-package com.example.lawSearch.domain.user.dto.response;
+package com.example.lawSearch.domain.answer.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDto {
-    private String name;
+@Data
+public class AnswerResponseDto {
+    private Long answerId;
 }

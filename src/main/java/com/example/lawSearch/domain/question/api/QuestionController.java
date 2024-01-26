@@ -10,6 +10,7 @@ import com.example.lawSearch.domain.question.dto.response.QuestionResponse;
 import com.example.lawSearch.domain.question.model.Question;
 import com.example.lawSearch.domain.question.service.QuestionService;
 import com.example.lawSearch.global.auth.PrincipalDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +28,7 @@ public class QuestionController {
 
     @PostMapping("")
     public ResponseEntity<QuestionIdResponse> createQuestion (
-            @AuthenticationPrincipal PrincipalDetails principal, @RequestBody CreateQuestionRequest request) {
+            @AuthenticationPrincipal PrincipalDetails principal, @Valid @RequestBody CreateQuestionRequest request) {
         Long questionId = questionService.createQuestion(request, principal.getUser());
 
         return ResponseEntity.ok(new QuestionIdResponse(questionId));
@@ -44,7 +45,7 @@ public class QuestionController {
 
     @PatchMapping("/{questionId}")
     public ResponseEntity<QuestionIdResponse> updateQuestion (
-            @AuthenticationPrincipal PrincipalDetails principal, @RequestBody UpdateQuestionRequest request,
+            @AuthenticationPrincipal PrincipalDetails principal, @Valid @RequestBody UpdateQuestionRequest request,
             @PathVariable Long questionId) {
         questionService.updateQuestion(request, questionId, principal.getUser());
 
@@ -62,7 +63,7 @@ public class QuestionController {
     @GetMapping("/list")
     public ResponseEntity<List<QuestionListResponse>> questionList(
             @AuthenticationPrincipal PrincipalDetails principal) {
-        List<QuestionListResponse> questionList = questionService.findAllByUser(principal.getUser().getId());
+        List<QuestionListResponse> questionList = questionService.findAllByUser(principal.getUser());
 
         return ResponseEntity.ok(questionList);
     }

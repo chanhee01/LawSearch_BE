@@ -1,6 +1,11 @@
 package com.example.lawSearch.domain.user.service;
 
+import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
+import com.example.lawSearch.domain.question.service.QuestionService;
+import com.example.lawSearch.domain.suggestion.dto.response.SuggestionListResponse;
+import com.example.lawSearch.domain.suggestion.service.SuggestionService;
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
+import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
 import com.example.lawSearch.domain.user.exception.EmailExistException;
 import com.example.lawSearch.domain.user.exception.UserNotFoundException;
@@ -11,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -18,6 +25,8 @@ public class UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
+    private final QuestionService questionService;
+    private final SuggestionService suggestionService;
 
     @Transactional
     public UserResponseDto join(UserRequestDto request) {
@@ -34,7 +43,17 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new UserResponseDto(user.getId());
+        return new UserResponseDto(user.getName());
+    }
+
+    public MyPageResponseDto myPage(User user) {
+        List<QuestionListResponse> questionList = questionService.findAllByUser(user);
+        List<SuggestionListResponse> suggestionList = suggestionService.findAllByUser(user);
+
+        Integer questions = (questionList == null) ? 0 : questionList.size();
+        Integer suggestions = (suggestionList == null) ? 0 : suggestionList.size();
+
+        return new MyPageResponseDto(questions, suggestions);
     }
 
     public boolean validationEmail(String email) {

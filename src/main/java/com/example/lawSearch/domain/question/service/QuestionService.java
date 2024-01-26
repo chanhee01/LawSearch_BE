@@ -70,8 +70,8 @@ public class QuestionService {
         return question;
     }
 
-    public List<QuestionListResponse> findAllByUser(Long userId) {
-        List<Question> questionList = questionRepository.findAllByUserId(userId);
+    public List<QuestionListResponse> findAllByUser(User user) {
+        List<Question> questionList = questionRepository.findAllByUser(user);
         List<QuestionListResponse> questions = questionList.stream().map(
                 (question) -> QuestionListResponse.convert(question))
                 .collect(Collectors.toList());

@@ -2,15 +2,16 @@ package com.example.lawSearch.domain.user.api;
 
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.dto.request.ValidationEmailRequestDto;
+import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
 import com.example.lawSearch.domain.user.service.UserService;
+import com.example.lawSearch.global.auth.PrincipalDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +30,12 @@ public class UserController {
     @PostMapping("validation/email")
     public ResponseEntity<Boolean> validationEmail(@Valid @RequestBody ValidationEmailRequestDto request) {
         return ResponseEntity.ok(userService.validationEmail(request.getEmail()));
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/myPage")
+    public ResponseEntity<MyPageResponseDto> myPage(@AuthenticationPrincipal PrincipalDetails principal) {
+        MyPageResponseDto myPageResponse = userService.myPage(principal.getUser());
+        return ResponseEntity.ok(myPageResponse);
     }
 }

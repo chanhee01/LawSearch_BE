@@ -37,8 +37,7 @@ public class SuggestionService {
 
     @Transactional
     public void deleteSuggestion(Long suggestionId, User user) {
-        Suggestion suggestion = suggestionRepository.findById(suggestionId)
-                .orElseThrow(() -> new SuggestionNotFoundException(suggestionId));
+        Suggestion suggestion = findById(suggestionId);
 
         if (user.getId() != suggestion.getUser().getId()) {
             throw new SuggestionUserMismatchException(user.getId());

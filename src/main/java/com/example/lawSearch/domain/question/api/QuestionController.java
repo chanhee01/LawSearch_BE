@@ -63,7 +63,7 @@ public class QuestionController {
     @GetMapping("/list")
     public ResponseEntity<List<QuestionListResponse>> questionList(
             @AuthenticationPrincipal PrincipalDetails principal) {
-        List<QuestionListResponse> questionList = questionService.findAllByUser(principal.getUser().getId());
+        List<QuestionListResponse> questionList = questionService.findAllByUser(principal.getUser());
 
         return ResponseEntity.ok(questionList);
     }

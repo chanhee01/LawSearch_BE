@@ -19,6 +19,7 @@ public class QuestionResponse {
     private boolean status;
     private LocalDateTime createdTime;
     private String comment;
+    private LocalDateTime commentTime;
 
     public QuestionResponse(Question question, Answer answer) {
         this.title = question.getTitle();
@@ -27,6 +28,7 @@ public class QuestionResponse {
         this.status = question.isStatus();
         this.createdTime = question.getCreatedDate();
         this.comment = answer.getContent();
+        this.commentTime = answer.getCreatedDate();
     }
 
     public QuestionResponse(Question question) {

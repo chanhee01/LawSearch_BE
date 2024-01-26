@@ -108,7 +108,7 @@ public class QuestionServiceTest {
         Question question4 = questionService.findById(questionId4);
         // ===== 다른 사람이 작성한 문의 글 ======
 
-        List<QuestionListResponse> questionList = questionService.findAllByUser(user.getId());
+        List<QuestionListResponse> questionList = questionService.findAllByUser(user);
 
         assertThat(questionList.contains(question1));
         assertThat(questionList.contains(question2));

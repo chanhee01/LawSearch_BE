@@ -1,5 +1,7 @@
 package com.example.lawSearch.domain.suggestion.service;
 
+import com.example.lawSearch.domain.like.model.Like;
+import com.example.lawSearch.domain.like.service.LikeService;
 import com.example.lawSearch.domain.suggestion.dto.request.CreateSuggestionDto;
 import com.example.lawSearch.domain.suggestion.dto.response.SuggestionListResponse;
 import com.example.lawSearch.domain.suggestion.exception.SuggestionNotFoundException;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class SuggestionService {
 
     private final SuggestionRepository suggestionRepository;
+    private final LikeService likeService;
 
     @Transactional
     public Long createSuggestion(CreateSuggestionDto request, User user) {
@@ -46,22 +48,27 @@ public class SuggestionService {
         suggestionRepository.delete(suggestion);
     }
 
-    public List<SuggestionListResponse> findAllSuggestion(String reqCategory, Boolean likeCount) {
+    public List<SuggestionListResponse> findAllSuggestion(String reqCategory, Boolean likeCount, User user) {
         Category category;
         if (reqCategory != null) category = Category.categoryConverter(reqCategory);
         else category = null;
 
-        List<Suggestion> allSuggestion = suggestionRepository.findAllSuggestion(category, likeCount);
-        return allSuggestion.stream()
-                .map(suggestion -> SuggestionListResponse.convert(suggestion))
+        List<Suggestion> suggestionList = suggestionRepository.findAllSuggestion(category, likeCount);
+
+        List<Long> userLikeSuggestions = suggestionUserLikes(suggestionList, user);
+
+        return suggestionList.stream()
+                .map(suggestion -> SuggestionListResponse.convert(suggestion, userLikeSuggestions))
                 .collect(Collectors.toList());
     }
 
     public List<SuggestionListResponse> findAllByUser(User user) {
         List<Suggestion> suggestionList = suggestionRepository.findAllByUser(user);
+
         List<SuggestionListResponse> suggestions = suggestionList.stream()
                 .map((suggestion -> SuggestionListResponse.convert(suggestion)))
                 .collect(Collectors.toList());
+
         return suggestions;
     }
 
@@ -74,9 +81,24 @@ public class SuggestionService {
     public List<SuggestionListResponse> findByCategory(User user) {
         Category category = Category.categoryConverter(user.getName());
         List<Suggestion> suggestionList = suggestionRepository.findAllByCategory(category);
+
+        List<Long> userLikeSuggestions = suggestionUserLikes(suggestionList, user);
+
         List<SuggestionListResponse> suggestions = suggestionList.stream()
-                .map((suggestion -> SuggestionListResponse.convert(suggestion)))
+                .map((suggestion -> SuggestionListResponse.convert(suggestion, userLikeSuggestions)))
                 .collect(Collectors.toList());
         return suggestions;
+    }
+
+    public List<Long> suggestionUserLikes(List<Suggestion> suggestionList, User user) {
+        List<Long> suggestionIds = suggestionList.stream()
+                .map((suggestion -> suggestion.getId()))
+                .collect(Collectors.toList());
+
+        List<Like> likes = likeService.likeListBySuggestion(user, suggestionIds);
+
+        return likes.stream().
+                map(like -> like.getSuggestion().getId())
+                .collect(Collectors.toList());
     }
 }

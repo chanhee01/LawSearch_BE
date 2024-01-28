@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,7 +16,20 @@ public class SuggestionListResponse {
     private String name;
     private LocalDateTime createdTime;
     private Integer likeCount;
+    private Boolean likeStatus;
     private Long id;
+
+    public static SuggestionListResponse convert(Suggestion suggestion, List<Long> userLikeSuggestion) {
+        return SuggestionListResponse.builder()
+                .title(suggestion.getTitle())
+                .category(suggestion.getCategory())
+                .name(suggestion.getUser().getName())
+                .createdTime(suggestion.getCreatedDate())
+                .likeCount(suggestion.getLikeList() != null ? suggestion.getLikeList().size() : 0)
+                .likeStatus(userLikeSuggestion.contains(suggestion.getId()) ? true : false)
+                .id(suggestion.getId())
+                .build();
+    }
 
     public static SuggestionListResponse convert(Suggestion suggestion) {
         return SuggestionListResponse.builder()

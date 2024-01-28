@@ -4,12 +4,13 @@ import com.example.lawSearch.domain.answer.exception.AnswerAlreadyExistException
 import com.example.lawSearch.domain.answer.model.Answer;
 import com.example.lawSearch.domain.answer.repository.AnswerRepository;
 import com.example.lawSearch.domain.question.model.Question;
-import com.example.lawSearch.domain.question.repository.QuestionRepository;
 import com.example.lawSearch.domain.question.service.QuestionService;
 import com.example.lawSearch.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

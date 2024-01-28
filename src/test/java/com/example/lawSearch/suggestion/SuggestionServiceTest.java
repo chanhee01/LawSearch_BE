@@ -99,7 +99,7 @@ public class SuggestionServiceTest {
         CreateSuggestionDto suggestionDto3 = new CreateSuggestionDto("title3", "content3", "교육위원회");
         Long suggestionId3 = suggestionService.createSuggestion(suggestionDto3, user2);
 
-        List<SuggestionListResponse> suggestions = suggestionService.findAllSuggestion("교육위원회", true);
+        List<SuggestionListResponse> suggestions = suggestionService.findAllSuggestion("교육위원회", true, user2);
 
         List<Long> suggestionIds = suggestions.stream().map(suggestion -> suggestion.getId()).collect(Collectors.toList());
 

@@ -5,12 +5,17 @@ import com.example.lawSearch.domain.like.exception.LikeNotFoundException;
 import com.example.lawSearch.domain.like.exception.SelfLikeException;
 import com.example.lawSearch.domain.like.model.Like;
 import com.example.lawSearch.domain.like.repository.LikeRepository;
+import com.example.lawSearch.domain.suggestion.dto.response.SuggestionResponse;
+import com.example.lawSearch.domain.suggestion.exception.SuggestionNotFoundException;
 import com.example.lawSearch.domain.suggestion.model.Suggestion;
+import com.example.lawSearch.domain.suggestion.repository.SuggestionRepository;
 import com.example.lawSearch.domain.suggestion.service.SuggestionService;
 import com.example.lawSearch.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,11 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class LikeService {
 
     private final LikeRepository likeRepository;
-    private final SuggestionService suggestionService;
+    private final SuggestionRepository suggestionRepository;
 
     @Transactional
     public void like(User user, Long suggestionId) {
-        Suggestion suggestion = suggestionService.findById(suggestionId);
+        Suggestion suggestion = findById(suggestionId);
 
         if (user.getId() == suggestion.getUser().getId()) {
             throw new SelfLikeException(suggestionId);
@@ -41,7 +46,7 @@ public class LikeService {
 
     @Transactional
     public void deleteLike(User user, Long suggestionId) {
-        Suggestion suggestion = suggestionService.findById(suggestionId);
+        Suggestion suggestion = findById(suggestionId);
 
         if (likeRepository.findLikeByUserIdAndSuggestion(user.getId(), suggestion) == null) {
             throw new LikeNotFoundException(suggestionId);
@@ -50,5 +55,13 @@ public class LikeService {
         Like like = likeRepository.findLikeByUserIdAndSuggestion(user.getId(), suggestion);
 
         likeRepository.delete(like);
+    }
+
+    public List<Like> likeListBySuggestion(User user, List<Long> suggestions) {
+        return likeRepository.findByUserIdAndSuggestionIdIn(user.getId(), suggestions);
+    }
+
+    public Suggestion findById(Long suggestionId) {
+        return suggestionRepository.findById(suggestionId).orElseThrow(() -> new SuggestionNotFoundException(suggestionId));
     }
 }

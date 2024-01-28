@@ -51,10 +51,11 @@ public class SuggestionController {
 
     @GetMapping("/list")
     public ResponseEntity<List<SuggestionListResponse>> suggestionList(
+            @AuthenticationPrincipal PrincipalDetails principal,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Boolean likeCount) {
 
-        List<SuggestionListResponse> allSuggestion = suggestionService.findAllSuggestion(category, likeCount);
+        List<SuggestionListResponse> allSuggestion = suggestionService.findAllSuggestion(category, likeCount, principal.getUser());
         return ResponseEntity.ok(allSuggestion);
     }
 }

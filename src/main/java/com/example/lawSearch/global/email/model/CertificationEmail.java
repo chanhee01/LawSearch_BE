@@ -1,5 +1,6 @@
 package com.example.lawSearch.global.email.model;
 
+import com.example.lawSearch.global.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,7 +13,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @NoArgsConstructor
-public class CertificationEmail {
+public class CertificationEmail extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

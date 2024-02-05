@@ -4,6 +4,7 @@ import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
 import com.example.lawSearch.domain.question.service.QuestionService;
 import com.example.lawSearch.domain.suggestion.dto.response.SuggestionListResponse;
 import com.example.lawSearch.domain.suggestion.service.SuggestionService;
+import com.example.lawSearch.domain.user.dto.request.EmailCertificationRequestDto;
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
@@ -11,6 +12,9 @@ import com.example.lawSearch.domain.user.exception.EmailExistException;
 import com.example.lawSearch.domain.user.exception.UserNotFoundException;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.domain.user.repository.UserRepository;
+import com.example.lawSearch.global.email.model.CertificationEmail;
+import com.example.lawSearch.global.email.provider.EmailProvider;
+import com.example.lawSearch.global.email.repository.CertificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final QuestionService questionService;
     private final SuggestionService suggestionService;
+    private final EmailProvider emailProvider;
+    private final CertificationRepository certificationRepository;
 
     @Transactional
     public UserResponseDto join(UserRequestDto request) {
@@ -71,4 +77,24 @@ public class UserService {
         return user;
     }
 
+    @Transactional
+    public void emailCertification(EmailCertificationRequestDto request) {
+        String email = request.getEmail();
+
+        String certificationNumber = getCertificationNumber();
+
+        emailProvider.sendCertificationMail(email, certificationNumber);
+
+        CertificationEmail certificationEmail = CertificationEmail.builder().email(email)
+                .certificationNumber(certificationNumber).build();
+        certificationRepository.save(certificationEmail);
+    }
+
+    private static String getCertificationNumber() {
+        String certificationNumber = "";
+
+        for (int count = 0; count < 4; count++) certificationNumber += (int) (Math.random() * 10);
+
+        return certificationNumber;
+    }
 }

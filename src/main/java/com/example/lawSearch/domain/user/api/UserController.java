@@ -1,5 +1,6 @@
 package com.example.lawSearch.domain.user.api;
 
+import com.example.lawSearch.domain.user.dto.request.EmailCertificationRequestDto;
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.dto.request.ValidationEmailRequestDto;
 import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
@@ -37,5 +38,11 @@ public class UserController {
     public ResponseEntity<MyPageResponseDto> myPage(@AuthenticationPrincipal PrincipalDetails principal) {
         MyPageResponseDto myPageResponse = userService.myPage(principal.getUser());
         return ResponseEntity.ok(myPageResponse);
+    }
+
+    @PostMapping("/email/certification")
+    public ResponseEntity<Void> emailCertification(@Valid @RequestBody EmailCertificationRequestDto request) {
+        userService.emailCertification(request);
+        return ResponseEntity.ok().build();
     }
 }

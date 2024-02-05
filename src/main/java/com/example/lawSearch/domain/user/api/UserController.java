@@ -1,8 +1,10 @@
 package com.example.lawSearch.domain.user.api;
 
+import com.example.lawSearch.domain.user.dto.request.CheckCertificationRequestDto;
 import com.example.lawSearch.domain.user.dto.request.EmailCertificationRequestDto;
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.dto.request.ValidationEmailRequestDto;
+import com.example.lawSearch.domain.user.dto.response.EmailCertificationResponseDto;
 import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
 import com.example.lawSearch.domain.user.service.UserService;
@@ -41,8 +43,16 @@ public class UserController {
     }
 
     @PostMapping("/email/certification")
-    public ResponseEntity<Void> emailCertification(@Valid @RequestBody EmailCertificationRequestDto request) {
-        userService.emailCertification(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<EmailCertificationResponseDto> emailCertification(
+            @Valid @RequestBody EmailCertificationRequestDto request) {
+        EmailCertificationResponseDto certificationId = userService.emailCertification(request);
+        return ResponseEntity.ok(certificationId);
+    }
+
+    @PostMapping("/check/certification")
+    public ResponseEntity<Boolean> certificationCheck(
+        @Valid @RequestBody CheckCertificationRequestDto request) {
+        Boolean checkedStatus = userService.checkCertification(request);
+        return ResponseEntity.ok(checkedStatus);
     }
 }

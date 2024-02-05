@@ -4,10 +4,13 @@ import com.example.lawSearch.domain.question.dto.response.QuestionListResponse;
 import com.example.lawSearch.domain.question.service.QuestionService;
 import com.example.lawSearch.domain.suggestion.dto.response.SuggestionListResponse;
 import com.example.lawSearch.domain.suggestion.service.SuggestionService;
+import com.example.lawSearch.domain.user.dto.request.CheckCertificationRequestDto;
 import com.example.lawSearch.domain.user.dto.request.EmailCertificationRequestDto;
 import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
+import com.example.lawSearch.domain.user.dto.response.EmailCertificationResponseDto;
 import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
+import com.example.lawSearch.domain.user.exception.CertificationNotFoundException;
 import com.example.lawSearch.domain.user.exception.EmailExistException;
 import com.example.lawSearch.domain.user.exception.UserNotFoundException;
 import com.example.lawSearch.domain.user.model.User;
@@ -39,6 +42,7 @@ public class UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailExistException(request.getEmail());
         }
+
         User user = User.builder()
                 .email(request.getEmail())
                 .password(bCryptPasswordEncoder.encode(request.getPassword()))
@@ -78,7 +82,7 @@ public class UserService {
     }
 
     @Transactional
-    public void emailCertification(EmailCertificationRequestDto request) {
+    public EmailCertificationResponseDto emailCertification(EmailCertificationRequestDto request) {
         String email = request.getEmail();
 
         String certificationNumber = getCertificationNumber();
@@ -87,7 +91,19 @@ public class UserService {
 
         CertificationEmail certificationEmail = CertificationEmail.builder().email(email)
                 .certificationNumber(certificationNumber).build();
-        certificationRepository.save(certificationEmail);
+        CertificationEmail certification = certificationRepository.save(certificationEmail);
+        return new EmailCertificationResponseDto(certification.getId());
+    }
+
+    public Boolean checkCertification(CheckCertificationRequestDto request) {
+        Long certificationId = request.getCertificationId();
+        String certificationNumber = request.getCertificationNumber();
+
+        CertificationEmail certification = certificationRepository.findById(certificationId)
+                .orElseThrow(() -> new CertificationNotFoundException(certificationId));
+
+        if (certification.getCertificationNumber().equals(certificationNumber)) return true;
+        else return false;
     }
 
     private static String getCertificationNumber() {

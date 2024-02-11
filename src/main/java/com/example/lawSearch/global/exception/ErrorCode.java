@@ -13,6 +13,9 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "Login02", "해당 사용자가 존재하지 않습니다."),
     CERTIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "Login03", "해당 이메일 인증이 존재하지 않습니다."),
 
+    // user
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "User01", "비밀번호가 일치하지 않습니다."),
+
     // question
     QUESTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "Question01", "문의가 존재하지 않습니다."),
     QUESTION_USER_MIX_MATCH(HttpStatus.BAD_REQUEST, "Question02", "작성자와 사용자가 일치하지 않습니다."),

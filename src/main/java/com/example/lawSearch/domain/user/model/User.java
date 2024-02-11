@@ -61,6 +61,10 @@ public class User extends BaseEntity {
         this.roles = roles;
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
     public List<String> getRoleList() {
         if (this.roles.length() > 0) {
             return Arrays.asList(this.roles.split(","));

@@ -13,6 +13,7 @@ import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
 import com.example.lawSearch.domain.user.exception.CertificationNotFoundException;
 import com.example.lawSearch.domain.user.exception.EmailExistException;
 import com.example.lawSearch.domain.user.exception.UserNotFoundException;
+import com.example.lawSearch.domain.user.exception.WrongPasswordException;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.domain.user.repository.UserRepository;
 import com.example.lawSearch.global.email.model.CertificationEmail;
@@ -79,6 +80,17 @@ public class UserService {
         User user = userRepository.findById(id).
                 orElseThrow(() -> new UserNotFoundException(id));
         return user;
+    }
+
+    @Transactional
+    public void updatePassword(Long userId, String password, String newPassword) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            throw new WrongPasswordException(password);
+        }
+
+        user.updatePassword(bCryptPasswordEncoder.encode(newPassword));
     }
 
     @Transactional

@@ -1,9 +1,6 @@
 package com.example.lawSearch.domain.user.api;
 
-import com.example.lawSearch.domain.user.dto.request.CheckCertificationRequestDto;
-import com.example.lawSearch.domain.user.dto.request.EmailCertificationRequestDto;
-import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
-import com.example.lawSearch.domain.user.dto.request.ValidationEmailRequestDto;
+import com.example.lawSearch.domain.user.dto.request.*;
 import com.example.lawSearch.domain.user.dto.response.EmailCertificationResponseDto;
 import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
@@ -40,6 +37,15 @@ public class UserController {
     public ResponseEntity<MyPageResponseDto> myPage(@AuthenticationPrincipal PrincipalDetails principal) {
         MyPageResponseDto myPageResponse = userService.myPage(principal.getUser());
         return ResponseEntity.ok(myPageResponse);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PatchMapping("/change/password")
+    public ResponseEntity<Void> updatePassword(
+            @AuthenticationPrincipal PrincipalDetails principal,
+            @RequestBody ChangePasswordRequestDto request) {
+        userService.updatePassword(principal.getUser().getId(), request.getPassword(), request.getNewPassword());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/email/certification")

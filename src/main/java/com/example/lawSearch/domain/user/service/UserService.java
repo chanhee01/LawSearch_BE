@@ -10,12 +10,12 @@ import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
 import com.example.lawSearch.domain.user.dto.response.EmailCertificationResponseDto;
 import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
-import com.example.lawSearch.domain.user.exception.CertificationNotFoundException;
-import com.example.lawSearch.domain.user.exception.EmailExistException;
-import com.example.lawSearch.domain.user.exception.UserNotFoundException;
-import com.example.lawSearch.domain.user.exception.WrongPasswordException;
+import com.example.lawSearch.domain.user.exception.*;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.domain.user.repository.UserRepository;
+import com.example.lawSearch.global.email.exception.CertificationExpiredException;
+import com.example.lawSearch.global.email.exception.CertificationNotFoundException;
+import com.example.lawSearch.global.email.exception.WrongCertificationNumberException;
 import com.example.lawSearch.global.email.model.CertificationEmail;
 import com.example.lawSearch.global.email.provider.EmailProvider;
 import com.example.lawSearch.global.email.repository.CertificationRepository;
@@ -24,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -104,6 +105,7 @@ public class UserService {
         CertificationEmail certificationEmail = CertificationEmail.builder().email(email)
                 .certificationNumber(certificationNumber).build();
         CertificationEmail certification = certificationRepository.save(certificationEmail);
+
         return new EmailCertificationResponseDto(certification.getId());
     }
 
@@ -114,8 +116,18 @@ public class UserService {
         CertificationEmail certification = certificationRepository.findById(certificationId)
                 .orElseThrow(() -> new CertificationNotFoundException(certificationId));
 
-        if (certification.getCertificationNumber().equals(certificationNumber)) return true;
-        else return false;
+        boolean isCertification = certification.getCertificationNumber().equals(certificationNumber);
+        boolean isEffective = certification.getCreatedDate().plusMinutes(5).isAfter(LocalDateTime.now());
+
+        if (!isCertification) {
+            throw new WrongCertificationNumberException(certificationId);
+        }
+
+        if (!isEffective) {
+            throw new CertificationExpiredException(certificationId);
+        }
+
+        return true;
     }
 
     private static String getCertificationNumber() {

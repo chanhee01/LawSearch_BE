@@ -1,4 +1,4 @@
-package com.example.lawSearch.domain.user.exception;
+package com.example.lawSearch.global.email.exception;
 
 import com.example.lawSearch.global.exception.ErrorCode;
 import com.example.lawSearch.global.exception.ServiceException;

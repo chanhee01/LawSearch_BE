@@ -1,7 +1,7 @@
 package com.example.lawSearch.domain.user.api;
 
-import com.example.lawSearch.domain.user.dto.request.UserRequestDto;
-import com.example.lawSearch.domain.user.dto.request.ValidationEmailRequestDto;
+import com.example.lawSearch.domain.user.dto.request.*;
+import com.example.lawSearch.domain.user.dto.response.EmailCertificationResponseDto;
 import com.example.lawSearch.domain.user.dto.response.MyPageResponseDto;
 import com.example.lawSearch.domain.user.dto.response.UserResponseDto;
 import com.example.lawSearch.domain.user.service.UserService;
@@ -37,5 +37,28 @@ public class UserController {
     public ResponseEntity<MyPageResponseDto> myPage(@AuthenticationPrincipal PrincipalDetails principal) {
         MyPageResponseDto myPageResponse = userService.myPage(principal.getUser());
         return ResponseEntity.ok(myPageResponse);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PatchMapping("/change/password")
+    public ResponseEntity<Void> updatePassword(
+            @AuthenticationPrincipal PrincipalDetails principal,
+            @RequestBody ChangePasswordRequestDto request) {
+        userService.updatePassword(principal.getUser().getId(), request.getPassword(), request.getNewPassword());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/email/certification")
+    public ResponseEntity<EmailCertificationResponseDto> emailCertification(
+            @Valid @RequestBody EmailCertificationRequestDto request) {
+        EmailCertificationResponseDto certificationId = userService.emailCertification(request);
+        return ResponseEntity.ok(certificationId);
+    }
+
+    @PostMapping("/check/certification")
+    public ResponseEntity<Boolean> certificationCheck(
+        @Valid @RequestBody CheckCertificationRequestDto request) {
+        Boolean checkedStatus = userService.checkCertification(request);
+        return ResponseEntity.ok(checkedStatus);
     }
 }

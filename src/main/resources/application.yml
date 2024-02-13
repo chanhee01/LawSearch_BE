@@ -17,7 +17,7 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${EMAIL_USERNAME}joch42678@gmail.com
+    username: ${EMAIL_USERNAME}
     password: ${EMAIL_PASSWORD}
     properties:
       smtp:
@@ -27,4 +27,4 @@ spring:
           enable: true
 
 jwt_secret : ${JWT_SECRET}
-GPT_URL : ${GPT_URL}
+gpt_url : ${GPT_URL}

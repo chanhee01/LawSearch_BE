@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class GptService {
 
-    @Value("${GPT_URL}")
+    @Value("${gpt_url}")
     private String GPT_URL;
 
     public String getBills(GptRequestDto request) {

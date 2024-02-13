@@ -31,7 +31,7 @@ public class Suggestion extends BaseEntity {
     private String content;
 
     @Enumerated(STRING)
-    private Category category; // 위원회 enum으로 설정
+    private Category category;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")

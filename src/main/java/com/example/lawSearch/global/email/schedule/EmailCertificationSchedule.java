@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class EmailSchedule {
+public class EmailCertificationSchedule {
 
     private final CertificationRepository certificationRepository;
 

@@ -27,4 +27,3 @@ spring:
           enable: true
 
 jwt_secret : ${JWT_SECRET}
-gpt_url : ${GPT_URL}

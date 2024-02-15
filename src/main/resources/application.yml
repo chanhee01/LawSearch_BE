@@ -20,10 +20,11 @@ spring:
     username: ${EMAIL_USERNAME}
     password: ${EMAIL_PASSWORD}
     properties:
-      smtp:
-        auth: true
-        starttls:
-          required: true
-          enable: true
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            required: true
+            enable: true
 
 jwt_secret : ${JWT_SECRET}

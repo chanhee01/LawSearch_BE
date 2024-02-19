@@ -5,6 +5,7 @@ import com.example.lawSearch.global.auth.PrincipalDetailsService;
 import com.example.lawSearch.global.auth.jwt.JwtAuthenticationFilter;
 import com.example.lawSearch.global.auth.jwt.JwtAuthorizationFilter;
 import com.example.lawSearch.global.auth.jwt.JwtProperties;
+import com.example.lawSearch.global.auth.token.repository.RefreshTokenRepository;
 import com.example.lawSearch.global.config.web.CorsConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ public class SecurityConfig {
     private final UserRepository userRepository;
     private final PrincipalDetailsService userDetailsService;
     private final JwtProperties jwtProperties;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -54,7 +56,7 @@ public class SecurityConfig {
         http.authenticationManager(authenticationManager);
 
         http.addFilterBefore(corsConfig.corsFilter(), SecurityContextPersistenceFilter.class);
-        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager, jwtProperties), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager, jwtProperties, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class);
         http.addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository, jwtProperties));
 
         http.httpBasic(httpBasic ->

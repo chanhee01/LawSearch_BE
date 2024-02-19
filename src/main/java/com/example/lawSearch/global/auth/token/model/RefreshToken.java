@@ -1,11 +1,13 @@
 package com.example.lawSearch.global.auth.token.model;
 
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -17,16 +19,16 @@ public class RefreshToken {
 
     private Long userId;
 
-    private String role;
+    private List<String> roles;
 
     @TimeToLive
     private long expiration;
 
     @Builder
-    public RefreshToken(String refreshToken, Long userId, String role, long expiration) {
+    public RefreshToken(String refreshToken, Long userId, List<String> roles, long expiration) {
         this.refreshToken = refreshToken;
         this.userId = userId;
-        this.role = role;
+        this.roles = roles;
         this.expiration = expiration;
     }
 }

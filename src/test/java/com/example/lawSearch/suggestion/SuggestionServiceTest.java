@@ -14,6 +14,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,7 +101,7 @@ public class SuggestionServiceTest {
         CreateSuggestionDto suggestionDto3 = new CreateSuggestionDto("title3", "content3", "교육위원회");
         Long suggestionId3 = suggestionService.createSuggestion(suggestionDto3, user2);
 
-        List<SuggestionListResponse> suggestions = suggestionService.findAllSuggestion("교육위원회", true, user2);
+        Page<SuggestionListResponse> suggestions = suggestionService.findAllSuggestion("교육위원회", true, user2, Pageable.unpaged());
 
         List<Long> suggestionIds = suggestions.stream().map(suggestion -> suggestion.getId()).collect(Collectors.toList());
 

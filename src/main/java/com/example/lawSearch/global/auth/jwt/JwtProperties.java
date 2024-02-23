@@ -11,7 +11,9 @@ public class JwtProperties {
     @Value("${jwt.secret}")
     private String secret;
 
-    private Integer expirationTime = 864000000;
+    private Integer expirationTime = 1200000; // 20분
+
+    private Integer refreshTokenTime = 604800000; // 일주일
 
     private String tokenPrefix = "Bearer ";
 

@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import static com.example.lawSearch.global.exception.ErrorCode.ACCESS_TOKEN_EXPIRED;
 
 @Slf4j
 @Component
@@ -30,8 +33,8 @@ public class AccessExpiredFilter extends OncePerRequestFilter {
             log.error("Access token expired", e);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            ErrorResponse errorResponse = new ErrorResponse("Access token expired", e.getMessage());
-            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+            objectMapper.writeValue(response.getWriter(), new ErrorResponse(ACCESS_TOKEN_EXPIRED.getCode(), ACCESS_TOKEN_EXPIRED.getMessage()));
         }
     }
 }

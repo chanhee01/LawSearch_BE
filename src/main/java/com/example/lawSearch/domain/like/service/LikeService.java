@@ -55,6 +55,7 @@ public class LikeService {
         Like like = likeRepository.findLikeByUserIdAndSuggestion(user.getId(), suggestion);
 
         likeRepository.delete(like);
+        suggestion.deleteLike(like);
     }
 
     public List<Like> likeListBySuggestion(User user, List<Long> suggestions) {

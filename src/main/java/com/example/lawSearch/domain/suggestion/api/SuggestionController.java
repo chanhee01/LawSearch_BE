@@ -9,6 +9,9 @@ import com.example.lawSearch.domain.suggestion.service.SuggestionService;
 import com.example.lawSearch.global.auth.PrincipalDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -50,12 +53,14 @@ public class SuggestionController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<SuggestionListResponse>> suggestionList(
+    public ResponseEntity<Page<SuggestionListResponse>> suggestionList(
             @AuthenticationPrincipal PrincipalDetails principal,
             @RequestParam(name = "category", required = false, value = "category") String category,
-            @RequestParam(name = "likeCount", required = false) Boolean likeCount) {
+            @RequestParam(name = "likeCount", required = false) Boolean likeCount,
+            @PageableDefault Pageable pageable) {
 
-        List<SuggestionListResponse> allSuggestion = suggestionService.findAllSuggestion(category, likeCount, principal.getUser());
+        Page<SuggestionListResponse> allSuggestion = suggestionService
+                .findAllSuggestion(category, likeCount, principal.getUser(), pageable);
         return ResponseEntity.ok(allSuggestion);
     }
 }

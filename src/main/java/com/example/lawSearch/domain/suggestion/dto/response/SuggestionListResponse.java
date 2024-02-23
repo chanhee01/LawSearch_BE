@@ -16,7 +16,7 @@ public class SuggestionListResponse {
     private String name;
     private LocalDateTime createdTime;
     private Integer likeCount;
-    private Boolean likeStatus;
+    private Boolean likeStatus; // 내가 이 글에 좋아요를 눌렀는지 여부
     private Long id;
 
     public static SuggestionListResponse convert(Suggestion suggestion, List<Long> userLikeSuggestion) {

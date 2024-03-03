@@ -26,22 +26,22 @@
     <td><b>법안 문의하기</b></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/286bd8ed-43cb-42e1-9c5f-991c5e827343" alt="서비스 소개"></td>
-    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/130c5e08-5b10-4696-9a18-34103cd1dd30" alt="로그인 및 회원가입"></td>
-    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/658c2572-6d06-4ebd-99b0-c565cc1210e5" alt="법안 추천"></td>
-    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/23ddfa00-d0be-412d-9fd4-04b3bae07d74" alt="법안 문의하기"></td>
+    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/286bd8ed-43cb-42e1-9c5f-991c5e827343" alt="서비스 소개" width="170"></td>
+    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/130c5e08-5b10-4696-9a18-34103cd1dd30" alt="로그인 및 회원가입" width="170"></td>
+    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/658c2572-6d06-4ebd-99b0-c565cc1210e5" alt="법안 추천" width="170"></td>
+    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/23ddfa00-d0be-412d-9fd4-04b3bae07d74" alt="법안 문의하기" width="170"></td>
   </tr>
   <tr>
     <td><b>정책 건의하기</b></td>
-    <td><b>정책 건의 광장 조회, 투표</b></td>
+    <td><b>정책 건의 조회, 투표</b></td>
     <td><b>마이페이지</b></td>
     <td><b>관리자 - 문의에 답변</b></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/c57746d9-9159-416e-842d-a5009a8c1e20" alt="정책 건의"></td>
-    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/6190d0b2-1fea-4105-9e0e-77f0021d9238" alt="정책 건의 광장"></td>
-    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/cb911aed-ca7a-4721-bdd5-2fc8263ade92" alt="마이페이지"></td>
-    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/aa67d922-bc55-4428-a225-e8b274465f44" alt="관리자 - 문의에 답변"></td>
+    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/c57746d9-9159-416e-842d-a5009a8c1e20" alt="정책 건의" width="170"></td>
+    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/6190d0b2-1fea-4105-9e0e-77f0021d9238" alt="정책 건의 광장" width="170"></td>
+    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/cb911aed-ca7a-4721-bdd5-2fc8263ade92" alt="마이페이지" width="170"></td>
+    <td><img src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/aa67d922-bc55-4428-a225-e8b274465f44" alt="관리자 - 문의에 답변" width="170"></td>
   </tr>
 </table>
 

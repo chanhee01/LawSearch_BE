@@ -2,9 +2,11 @@ package com.example.lawSearch.global.auth.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.domain.user.repository.UserRepository;
 import com.example.lawSearch.global.auth.PrincipalDetails;
+import com.example.lawSearch.global.auth.token.exception.AccessTokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,21 +44,24 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(jwtProperties.getHeaderString())
                 .replace(jwtProperties.getTokenPrefix(), "");
 
-        String email = JWT.require(Algorithm.HMAC512(jwtProperties.getSecret())).build().verify(token)
-                .getClaim("email").asString();
+        try {
+            String email = JWT.require(Algorithm.HMAC512(jwtProperties.getSecret())).build().verify(token)
+                    .getClaim("email").asString();
 
-        if (email != null) {
-            User userEntity = userRepository.findByEmail(email);
+            if (email != null) {
+                User userEntity = userRepository.findByEmail(email);
 
-            PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    principalDetails,
-                    null,
-                    principalDetails.getAuthorities());
+                PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        principalDetails,
+                        null,
+                        principalDetails.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (TokenExpiredException e) {
+            throw new AccessTokenExpiredException("Access 토큰 만료");
         }
-
         chain.doFilter(request, response);
     }
 }

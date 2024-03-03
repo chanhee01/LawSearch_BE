@@ -11,6 +11,9 @@ import com.example.lawSearch.domain.suggestion.repository.SuggestionRepository;
 import com.example.lawSearch.domain.user.model.User;
 import com.example.lawSearch.global.base.category.Category;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,18 +51,22 @@ public class SuggestionService {
         suggestionRepository.delete(suggestion);
     }
 
-    public List<SuggestionListResponse> findAllSuggestion(String reqCategory, Boolean likeCount, User user) {
+    public Page<SuggestionListResponse> findAllSuggestion(String reqCategory, Boolean likeCount, User user, Pageable pageable) {
         Category category;
         if (reqCategory != null) category = Category.categoryConverter(reqCategory);
         else category = null;
 
-        List<Suggestion> suggestionList = suggestionRepository.findAllSuggestion(category, likeCount);
+        Page<Suggestion> suggestionList = suggestionRepository.findAllSuggestion(category, likeCount, pageable);
 
         List<Long> userLikeSuggestions = suggestionUserLikes(suggestionList, user);
 
-        return suggestionList.stream()
+        List<SuggestionListResponse> suggestions = suggestionList.stream()
                 .map(suggestion -> SuggestionListResponse.convert(suggestion, userLikeSuggestions))
                 .collect(Collectors.toList());
+
+        suggestionList.getTotalPages();
+
+        return new PageImpl<>(suggestions, pageable, suggestionList.getTotalElements());
     }
 
     public List<SuggestionListResponse> findAllByUser(User user) {
@@ -88,6 +95,18 @@ public class SuggestionService {
                 .map((suggestion -> SuggestionListResponse.convert(suggestion, userLikeSuggestions)))
                 .collect(Collectors.toList());
         return suggestions;
+    }
+
+    public List<Long> suggestionUserLikes(Page<Suggestion> suggestionList, User user) {
+        List<Long> suggestionIds = suggestionList.stream()
+                .map((suggestion -> suggestion.getId()))
+                .collect(Collectors.toList());
+
+        List<Like> likes = likeService.likeListBySuggestion(user, suggestionIds);
+
+        return likes.stream().
+                map(like -> like.getSuggestion().getId())
+                .collect(Collectors.toList());
     }
 
     public List<Long> suggestionUserLikes(List<Suggestion> suggestionList, User user) {

@@ -20,6 +20,10 @@ public enum ErrorCode {
     // user
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "User01", "비밀번호가 일치하지 않습니다."),
 
+    // token
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "Token01", "refresh 토큰이 만료되어 다시 로그인이 필요합니다."),
+    ACCESS_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "Token02", "access 토큰이 만료"),
+
     // question
     QUESTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "Question01", "문의가 존재하지 않습니다."),
     QUESTION_USER_MIX_MATCH(HttpStatus.BAD_REQUEST, "Question02", "작성자와 사용자가 일치하지 않습니다."),
@@ -39,7 +43,6 @@ public enum ErrorCode {
 
     // answer
     ANSWER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "answer01", "답변이 이미 존재합니다.");
-
 
     private final HttpStatus status;
     private final String code;

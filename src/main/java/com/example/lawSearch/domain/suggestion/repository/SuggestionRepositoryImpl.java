@@ -2,13 +2,18 @@ package com.example.lawSearch.domain.suggestion.repository;
 
 import com.example.lawSearch.domain.suggestion.model.Suggestion;
 import com.example.lawSearch.global.base.category.Category;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 import static com.example.lawSearch.domain.suggestion.model.QSuggestion.*;
+import static com.example.lawSearch.domain.user.model.QUser.*;
 
 public class SuggestionRepositoryImpl implements SuggestionRepositoryCustom {
 
@@ -19,18 +24,34 @@ public class SuggestionRepositoryImpl implements SuggestionRepositoryCustom {
     }
 
     @Override
-    public List<Suggestion> findAllSuggestion(Category category, Boolean likeCount) {
-        JPAQuery<Suggestion> query = queryFactory.selectFrom(suggestion);
+    public Page<Suggestion> findAllSuggestion(Category category, Boolean likeCount, Pageable pageable) {
+        JPAQuery<Suggestion> query = queryFactory
+                .selectFrom(suggestion)
+                .leftJoin(suggestion.user, user)
+                .where(
+                        categoryEq(category),
+                        likeCountEq(likeCount)
+                );
 
-        if(category != null) {
-            query.where(suggestion.category.eq(category));
-        }
+        List<Suggestion> content = query
+                .orderBy(likeCount != null && likeCount ? suggestion.likeCount.desc() : suggestion.likeCount.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
+        Long total = query.fetchCount();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    private BooleanExpression categoryEq(Category category) {
+        return category != null ? suggestion.category.eq(category) : null;
+    }
+
+    private BooleanExpression likeCountEq(Boolean likeCount) {
         if (likeCount != null && likeCount) {
-            query.orderBy(suggestion.likeList.size().desc());
-        } else {
-            query.orderBy(suggestion.createdDate.desc());
+            return suggestion.likeList.isNotEmpty();
         }
-        return query.fetch();
+        return null;
     }
 }

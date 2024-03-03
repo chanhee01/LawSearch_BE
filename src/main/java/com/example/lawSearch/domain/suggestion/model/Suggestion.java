@@ -24,7 +24,7 @@ public class Suggestion extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long Id;
+    private Long id;
 
     private String title;
 
@@ -40,6 +40,8 @@ public class Suggestion extends BaseEntity {
     @OneToMany(mappedBy = "suggestion", cascade = ALL)
     private List<Like> likeList = new ArrayList<>();
 
+    private Long likeCount;
+
     @Builder
     public Suggestion(String title, String content, Category category, User user) {
         this.title = title;
@@ -50,5 +52,11 @@ public class Suggestion extends BaseEntity {
 
     public void addLike(Like like) {
         likeList.add(like);
+        likeCount++;
+    }
+
+    public void deleteLike(Like like) {
+        likeList.remove(like);
+        likeCount--;
     }
 }

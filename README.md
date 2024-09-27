@@ -102,11 +102,3 @@
 <div align="center">
     <img width="650" alt="CI/CD" src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/27317567-75ab-4fd3-8f93-ad3846812576">
 </div>
-
-<br>
-
-## **ER 다이어그램**
-
-<div align="center">
-    <img width="700" height="400" alt="ER 다이어그램" src="https://github.com/chanhee01/LawSearch_BE/assets/102280807/279196eb-8500-4372-890f-213ec7419c7c">
-</div>
